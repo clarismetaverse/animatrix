@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "euclid-reasoner"
+version = "0.1.0"
+description = "Euclidean geometric reasoner with prism-based search and HPG export"
+authors = [{name = "Federico"}]
+dependencies = []
+requires-python = ">=3.10"
+
+[project.scripts]
+euclid-reasoner-export-demo = "euclid_reasoner.export_demo:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
