@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import List, Optional, Set, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple
 
+
+# ---------- Geometry primitives ----------
 
 @dataclass(frozen=True, order=True)
 class Segment:
@@ -38,6 +40,8 @@ class Triangle:
         return f"{self.name}({''.join(self.vertices)})"
 
 
+# ---------- Facts (atomic) ----------
+
 @dataclass(frozen=True)
 class OnRay:
     point: str
@@ -62,6 +66,8 @@ class Congruent:
     t2: Triangle
     mapping: Tuple[Tuple[str, str], ...]
 
+
+# ---------- Fact store ----------
 
 @dataclass
 class Facts:
@@ -108,12 +114,22 @@ class Facts:
         return [pair for pair in self.eq_angs if pair[0].v == vertex or pair[1].v == vertex]
 
 
+# ---------- State + hierarchical trace (HPG backbone) ----------
+
+TraceStep = Dict[str, Any]
+
+
 @dataclass
 class State:
     facts: Facts = field(default_factory=Facts)
     triangles: List[Triangle] = field(default_factory=list)
     mode: str = "Seed"
+
+    # Human-readable trace (kept for backwards compatibility)
     trace: List[str] = field(default_factory=list)
+
+    # Machine-readable hierarchical trace (for HPG export)
+    htrace: List[TraceStep] = field(default_factory=list)
 
     def copy(self) -> "State":
         return State(
@@ -126,11 +142,49 @@ class State:
             triangles=list(self.triangles),
             mode=self.mode,
             trace=list(self.trace),
+            htrace=list(self.htrace),
         )
 
     def add_trace(self, message: str) -> None:
+        """Append a human-readable message to the linear trace."""
         self.trace.append(message)
 
+    def add_step(
+        self,
+        *,
+        prism: str,
+        label: str,
+        space: str = "space:main",
+        uses: Optional[List[str]] = None,
+        creates: Optional[List[str]] = None,
+        asserts: Optional[List[str]] = None,
+        rewrites: Optional[List[str]] = None,
+        meta: Optional[Dict[str, Any]] = None,
+    ) -> None:
+        """
+        Append BOTH:
+        - a human-readable trace line (label)
+        - a machine-readable hierarchical trace step (for HPG)
+
+        The IDs in uses/creates/asserts/rewrites are intentionally strings:
+        exporters can later normalize them into object/fact IDs.
+        """
+        self.trace.append(label)
+        self.htrace.append(
+            {
+                "prism": prism,
+                "label": label,
+                "space": space,
+                "uses": uses or [],
+                "creates": creates or [],
+                "asserts": asserts or [],
+                "rewrites": rewrites or [],
+                "meta": meta or {},
+            }
+        )
+
+
+# ---------- Helpers ----------
 
 def angle_at(vertex: str, left: str, right: str) -> Angle:
     return Angle(left, vertex, right)
@@ -173,3 +227,4 @@ def derive_angles_from_congruence(
     angles1 = triangle_angles(t1_vertices)
     angles2 = triangle_angles(v2)
     return list(zip(angles1, angles2))
+```0
