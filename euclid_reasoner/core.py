@@ -28,7 +28,7 @@ class Angle:
     c: str
 
     def __str__(self) -> str:
-        return f"∠{self.a}{self.v}{self.c}"
+        return f"ang({self.a}{self.v}{self.c})"
 
 
 @dataclass(frozen=True)
@@ -227,4 +227,3 @@ def derive_angles_from_congruence(
     angles1 = triangle_angles(t1_vertices)
     angles2 = triangle_angles(v2)
     return list(zip(angles1, angles2))
-```0
