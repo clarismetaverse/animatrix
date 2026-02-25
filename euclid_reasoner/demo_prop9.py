@@ -4,7 +4,8 @@ from typing import List
 
 from .core import State
 from .prisms import all_prisms
-from .search import SearchResult, beam_search
+from .search import beam_search
+from .types import SearchResult
 
 
 def solve_prop9(beam_k: int = 20, steps: int = 10) -> SearchResult:
