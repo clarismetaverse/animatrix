@@ -46,7 +46,7 @@ class ChoosePointOnRayBA(Prism):
                 new_state.add_step(
                     prism=self.name,
                     label=label,
-                    space="space:main",
+                    space="construction_space",
                     uses=["ray:BA"],
                     creates=[f"point:{point}"],
                     asserts=[f"OnRay({point},BA)"],
@@ -80,7 +80,7 @@ class CopyLengthToRayBC(Prism):
                 new_state.add_step(
                     prism=self.name,
                     label=label,
-                    space="space:main",
+                    space="construction_space",
                     uses=[f"point:{point}", "ray:BC"],
                     creates=[f"point:{target}"],
                     asserts=[
@@ -119,7 +119,7 @@ class EquilateralOnSegment(Prism):
                     new_state.add_step(
                         prism=self.name,
                         label=label,
-                        space="space:equilateral",
+                        space="equilateral_space",
                         uses=[f"point:{d}", f"point:{e}"],
                         creates=[f"point:{apex}"],
                         asserts=[f"EqSeg({seg_df},{seg_ef})"],
@@ -159,7 +159,7 @@ class InstantiateComparisonTriangles(Prism):
                 new_state.add_step(
                     prism=self.name,
                     label=label,
-                    space="space:triangles",
+                    space="triangle_space",
                     uses=[f"point:{d}", f"point:{e}", f"point:{apex}"],
                     creates=[f"triangle:{t1.name}", f"triangle:{t2.name}"],
                     asserts=[f"EqSeg(B{apex},B{apex})"],
@@ -203,7 +203,7 @@ class CongruenceSSSPrism(Prism):
                 new_state.add_step(
                     prism=self.name,
                     label=label,
-                    space="space:congruence",
+                    space="congruence_space",
                     uses=[f"triangle:{t1.name}", f"triangle:{t2.name}"],
                     creates=[],
                     asserts=[f"Congruent({t1.name},{t2.name})"],
