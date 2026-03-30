@@ -3,6 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Set, Tuple
 
+from .trace_schema import TraceStep
+
 
 # ---------- Geometry primitives ----------
 
@@ -116,8 +118,6 @@ class Facts:
 
 # ---------- State + hierarchical trace (HPG backbone) ----------
 
-TraceStep = Dict[str, Any]
-
 
 @dataclass
 class State:
@@ -149,38 +149,38 @@ class State:
         """Append a human-readable message to the linear trace."""
         self.trace.append(message)
 
+    def add_hstep(self, step: TraceStep) -> None:
+        self.htrace.append(step)
+
     def add_step(
         self,
         *,
         prism: str,
         label: str,
-        space: str = "space:main",
+        space: str = "construction_space",
         uses: Optional[List[str]] = None,
         creates: Optional[List[str]] = None,
         asserts: Optional[List[str]] = None,
         rewrites: Optional[List[str]] = None,
+        parents: Optional[List[str]] = None,
         meta: Optional[Dict[str, Any]] = None,
     ) -> None:
-        """
-        Append BOTH:
-        - a human-readable trace line (label)
-        - a machine-readable hierarchical trace step (for HPG)
-
-        The IDs in uses/creates/asserts/rewrites are intentionally strings:
-        exporters can later normalize them into object/fact IDs.
-        """
+        """Append both human-readable and structured trace steps."""
         self.trace.append(label)
-        self.htrace.append(
-            {
-                "prism": prism,
-                "label": label,
-                "space": space,
-                "uses": uses or [],
-                "creates": creates or [],
-                "asserts": asserts or [],
-                "rewrites": rewrites or [],
-                "meta": meta or {},
-            }
+        step_id = f"hstep:{len(self.htrace)}"
+        self.add_hstep(
+            TraceStep(
+                id=step_id,
+                prism=prism,
+                label=label,
+                space=space,
+                uses=uses or [],
+                creates=creates or [],
+                asserts=asserts or [],
+                rewrites=rewrites or [],
+                parents=parents or [],
+                meta={k: str(v) for k, v in (meta or {}).items()},
+            )
         )
 
 
