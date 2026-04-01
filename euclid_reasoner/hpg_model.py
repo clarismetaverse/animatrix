@@ -12,6 +12,8 @@ REWRITES = "rewrites"
 DERIVES = "derives"
 SUPPORTS_GOAL = "supports_goal"
 SHADOW_OF = "shadow_of"
+REINTERPRETS = "reinterprets"
+EXPLORES = "explores"
 
 
 @dataclass(frozen=True)
@@ -29,22 +31,26 @@ class SpaceNode(HPGNode):
 
 @dataclass(frozen=True)
 class ObjectNode(HPGNode):
-    pass
+    object_type: str = ""
 
 
 @dataclass(frozen=True)
 class ViewNode(HPGNode):
-    pass
+    role: str = ""
+    object_id: str = ""
+    space_id: str = ""
 
 
 @dataclass(frozen=True)
 class ProjectionNode(HPGNode):
-    pass
+    projection_type: str = ""
+    space_id: str = ""
 
 
 @dataclass(frozen=True)
 class FactNode(HPGNode):
-    pass
+    fact_type: str = ""
+    space_id: str = ""
 
 
 @dataclass(frozen=True)
@@ -89,15 +95,29 @@ def build_minimal_example_hpg() -> HPGGraph:
     graph = HPGGraph()
 
     space = SpaceNode(id="space:construction", label="construction", type="space")
-    obj = ObjectNode(id="object:segment:AB", label="segment:AB", type="object", meta={"object_type": "segment"})
+    obj = ObjectNode(id="object:segment:AB", label="segment:AB", type="object", object_type="segment")
     view = ViewNode(
         id="view:construction:segment:AB:generic",
         label="segment:AB@generic",
         type="view",
-        meta={"space": "construction", "role": "generic"},
+        role="generic",
+        object_id=obj.id,
+        space_id=space.id,
     )
-    proj = ProjectionNode(id="projection:hstep:0", label="Construct AB", type="projection")
-    fact = FactNode(id="fact:EqSeg(AB,AB)", label="EqSeg(AB,AB)", type="fact")
+    proj = ProjectionNode(
+        id="projection:hstep:0",
+        label="Construct AB",
+        type="projection",
+        projection_type="Construct",
+        space_id=space.id,
+    )
+    fact = FactNode(
+        id="fact:EqSeg(AB,AB)",
+        label="EqSeg(AB,AB)",
+        type="fact",
+        fact_type="EqSeg",
+        space_id=space.id,
+    )
     query = QueryNode(id="query:goal", label="Goal", type="query")
 
     for node in (space, obj, view, proj, fact, query):
@@ -106,7 +126,6 @@ def build_minimal_example_hpg() -> HPGGraph:
     graph.add_edge(HPGEdge(from_id=proj.id, to_id=space.id, type=IN_SPACE))
     graph.add_edge(HPGEdge(from_id=proj.id, to_id=view.id, type=CREATES))
     graph.add_edge(HPGEdge(from_id=view.id, to_id=obj.id, type=INTERPRETS))
-    graph.add_edge(HPGEdge(from_id=view.id, to_id=obj.id, type=SHADOW_OF))
     graph.add_edge(HPGEdge(from_id=proj.id, to_id=fact.id, type=ASSERTS))
     graph.add_edge(HPGEdge(from_id=fact.id, to_id=query.id, type=SUPPORTS_GOAL))
 

@@ -7,10 +7,11 @@ from .hpg_model import (
     ASSERTS,
     CREATES,
     DERIVES,
+    EXPLORES,
     IN_SPACE,
     INTERPRETS,
+    REINTERPRETS,
     REWRITES,
-    SHADOW_OF,
     SUPPORTS_GOAL,
     USES,
     FactNode,
@@ -32,34 +33,87 @@ def _extract_object_kind(entity: str) -> Optional[str]:
     return None
 
 
-def _ensure_object_and_view(graph: HPGGraph, *, entity: str, space: str) -> str:
+def _infer_fact_type(fact_label: str) -> str:
+    for prefix in ("EqSeg(", "EqAng(", "Congruent(", "OnRay("):
+        if fact_label.startswith(prefix):
+            return prefix[:-1]
+    return "Fact"
+
+
+def _infer_base_role(entity: str) -> str:
+    if entity.startswith("triangle:"):
+        return "triangle_instance"
+    if entity.startswith("point:"):
+        return "constructed_point"
+    if entity.startswith("segment:"):
+        return "segment_object"
+    if entity.startswith("angle:"):
+        return "angle_object"
+    return "generic"
+
+
+def _infer_role(entity: str, space: str) -> str:
     kind = _extract_object_kind(entity)
+    role = _infer_base_role(entity)
+
+    if space == "triangle_space":
+        if kind == "triangle":
+            return "triangle_instance"
+        if kind == "segment":
+            return "triangle_side_candidate"
+    if space == "equilateral_space" and kind == "segment":
+        return "equal_side_candidate"
+    if space == "congruence_space":
+        if kind == "segment":
+            return "congruence_participant"
+        if kind == "triangle":
+            return "congruence_triangle"
+    if space == "construction_space" and kind == "point":
+        return "constructed_point"
+
+    return role
+
+
+def _is_fact_like_entity(entity: str) -> bool:
+    return any(token in entity for token in ("Congruent(", "EqSeg(", "EqAng(", "OnRay("))
+
+
+def _ensure_object_and_view(graph: HPGGraph, *, entity: str, space: str) -> str:
+    if _is_fact_like_entity(entity):
+        return ""
+
+    kind = _extract_object_kind(entity)
+    role = _infer_role(entity, space)
     if kind is None:
-        view_id = f"view:{space}:{entity}:generic"
+        view_id = f"view:{space}:{entity}:{role}"
         graph.add_node(
             ViewNode(
                 id=view_id,
-                label=f"{entity}@generic",
+                label=f"{entity}@{role}",
                 type="view",
-                meta={"space": space, "role": "generic", "entity": entity},
+                role=role,
+                object_id=f"object:{entity}",
+                space_id=space,
+                meta={"entity": entity},
             )
         )
         return view_id
 
     object_id = f"object:{entity}"
-    graph.add_node(ObjectNode(id=object_id, label=entity, type="object", meta={"object_type": kind}))
+    graph.add_node(ObjectNode(id=object_id, label=entity, type="object", object_type=kind))
 
-    view_id = f"view:{space}:{entity}:generic"
+    view_id = f"view:{space}:{entity}:{role}"
     graph.add_node(
         ViewNode(
             id=view_id,
-            label=f"{entity}@generic",
+            label=f"{entity}@{role}",
             type="view",
-            meta={"space": space, "role": "generic", "object": object_id},
+            role=role,
+            object_id=object_id,
+            space_id=space,
         )
     )
     graph.add_edge(HPGEdge(from_id=view_id, to_id=object_id, type=INTERPRETS))
-    graph.add_edge(HPGEdge(from_id=view_id, to_id=object_id, type=SHADOW_OF))
     return view_id
 
 
@@ -82,29 +136,75 @@ def result_to_hpg(result: SearchResult) -> dict:
     for step in state.htrace:
         graph.add_node(SpaceNode(id=step.space, label=step.space, type="space"))
 
+    latest_view_by_object: dict[str, tuple[str, str]] = {}
+
     for step in state.htrace:
         projection_id = f"projection:{step.id}"
-        graph.add_node(ProjectionNode(id=projection_id, label=step.label, type="projection", meta={"prism": step.prism}))
+        graph.add_node(
+            ProjectionNode(
+                id=projection_id,
+                label=step.label,
+                type="projection",
+                projection_type=step.prism,
+                space_id=step.space,
+            )
+        )
         graph.add_edge(HPGEdge(from_id=projection_id, to_id=step.space, type=IN_SPACE))
 
         for used in step.uses:
             view_id = _ensure_object_and_view(graph, entity=used, space=step.space)
+            if not view_id:
+                continue
             graph.add_edge(HPGEdge(from_id=projection_id, to_id=view_id, type=USES))
 
         for created in step.creates:
             view_id = _ensure_object_and_view(graph, entity=created, space=step.space)
+            if not view_id:
+                continue
             graph.add_edge(HPGEdge(from_id=projection_id, to_id=view_id, type=CREATES))
+            object_id = f"object:{created}"
+            if object_id in latest_view_by_object:
+                old_view_id, old_space = latest_view_by_object[object_id]
+                if old_space != step.space and old_view_id != view_id:
+                    graph.add_edge(HPGEdge(from_id=view_id, to_id=old_view_id, type=REINTERPRETS))
+            latest_view_by_object[object_id] = (view_id, step.space)
+
+        for used in step.uses:
+            object_id = f"object:{used}"
+            current_view_id = _ensure_object_and_view(graph, entity=used, space=step.space)
+            if not current_view_id or object_id not in latest_view_by_object:
+                continue
+            old_view_id, old_space = latest_view_by_object[object_id]
+            if old_space != step.space and old_view_id != current_view_id:
+                graph.add_edge(HPGEdge(from_id=current_view_id, to_id=old_view_id, type=EXPLORES))
+            latest_view_by_object[object_id] = (current_view_id, step.space)
 
         for asserted in step.asserts:
             fact_id = f"fact:{asserted}"
-            graph.add_node(FactNode(id=fact_id, label=asserted, type="fact"))
+            graph.add_node(
+                FactNode(
+                    id=fact_id,
+                    label=asserted,
+                    type="fact",
+                    fact_type=_infer_fact_type(asserted),
+                    space_id=step.space,
+                )
+            )
             graph.add_edge(HPGEdge(from_id=projection_id, to_id=fact_id, type=ASSERTS))
             if _fact_matches_target(asserted, result.target):
                 graph.add_edge(HPGEdge(from_id=fact_id, to_id=query_id, type=SUPPORTS_GOAL))
 
         for rewritten in step.rewrites:
             fact_id = f"fact:{rewritten}"
-            graph.add_node(FactNode(id=fact_id, label=rewritten, type="fact"))
+            graph.add_node(
+                FactNode(
+                    id=fact_id,
+                    label=rewritten,
+                    type="fact",
+                    fact_type=_infer_fact_type(rewritten),
+                    space_id=step.space,
+                )
+            )
             graph.add_edge(HPGEdge(from_id=projection_id, to_id=fact_id, type=REWRITES))
             if _fact_matches_target(rewritten, result.target):
                 graph.add_edge(HPGEdge(from_id=fact_id, to_id=query_id, type=SUPPORTS_GOAL))
