@@ -1,0 +1,103 @@
+:root {
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  color: #0f172a;
+}
+
+body, html, #root {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.app-shell {
+  height: 100%;
+}
+
+header {
+  border-bottom: 1px solid #e2e8f0;
+  padding: 10px 16px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 300px 1fr 320px;
+  height: calc(100% - 54px);
+}
+
+.left-panel {
+  overflow: auto;
+  border-right: 1px solid #e2e8f0;
+  padding: 12px;
+}
+
+.graph-panel {
+  height: 100%;
+}
+
+.sidebar {
+  overflow: auto;
+  border-left: 1px solid #e2e8f0;
+  padding: 12px;
+  background: #f8fafc;
+}
+
+.panel {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 12px;
+}
+
+.search-input, textarea {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 8px;
+}
+
+.checkbox-row {
+  display: block;
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.button-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.kv {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 8px;
+  margin: 6px 0;
+  align-items: start;
+}
+
+.legend-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+}
+
+.legend-item {
+  font-size: 13px;
+}
+
+.dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+}
+
+.muted {
+  color: #64748b;
+  font-size: 12px;
+}
