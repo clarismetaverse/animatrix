@@ -25,6 +25,18 @@ def test_export_graph_json() -> None:
     assert "view" in node_types
 
     assert "interprets" in edge_types
+    assert "reinterprets" in edge_types or "explores" in edge_types
+
+    interpreting_edges = [edge for edge in graph["edges"] if edge["type"] == "interprets"]
+    shadow_edges = [edge for edge in graph["edges"] if edge["type"] == "shadow_of"]
+    assert interpreting_edges
+    assert len(shadow_edges) < len(interpreting_edges)
+
+    fact_nodes = [node for node in graph["nodes"] if node["type"] == "fact"]
+    assert any(node.get("fact_type") and node.get("space_id") for node in fact_nodes)
+
+    projection_nodes = [node for node in graph["nodes"] if node["type"] == "projection"]
+    assert any(node.get("projection_type") and node.get("space_id") for node in projection_nodes)
 
     if result.target is not None:
         assert "supports_goal" in edge_types
