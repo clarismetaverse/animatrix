@@ -1,0 +1,113 @@
+from __future__ import annotations
+
+from dataclasses import asdict, dataclass, field
+from typing import Dict, List
+
+IN_SPACE = "in_space"
+INTERPRETS = "interprets"
+USES = "uses"
+CREATES = "creates"
+ASSERTS = "asserts"
+REWRITES = "rewrites"
+DERIVES = "derives"
+SUPPORTS_GOAL = "supports_goal"
+SHADOW_OF = "shadow_of"
+
+
+@dataclass(frozen=True)
+class HPGNode:
+    id: str
+    label: str
+    type: str
+    meta: Dict[str, str] = field(default_factory=dict)
+
+
+@dataclass(frozen=True)
+class SpaceNode(HPGNode):
+    pass
+
+
+@dataclass(frozen=True)
+class ObjectNode(HPGNode):
+    pass
+
+
+@dataclass(frozen=True)
+class ViewNode(HPGNode):
+    pass
+
+
+@dataclass(frozen=True)
+class ProjectionNode(HPGNode):
+    pass
+
+
+@dataclass(frozen=True)
+class FactNode(HPGNode):
+    pass
+
+
+@dataclass(frozen=True)
+class QueryNode(HPGNode):
+    pass
+
+
+@dataclass(frozen=True)
+class HPGEdge:
+    from_id: str
+    to_id: str
+    type: str
+    meta: Dict[str, str] = field(default_factory=dict)
+
+
+@dataclass
+class HPGGraph:
+    nodes: List[HPGNode] = field(default_factory=list)
+    edges: List[HPGEdge] = field(default_factory=list)
+    _node_ids: set[str] = field(default_factory=set, init=False, repr=False)
+
+    def add_node(self, node: HPGNode) -> None:
+        if node.id in self._node_ids:
+            return
+        self._node_ids.add(node.id)
+        self.nodes.append(node)
+
+    def add_edge(self, edge: HPGEdge) -> None:
+        self.edges.append(edge)
+
+    def to_dict(self) -> dict:
+        return {
+            "nodes": [asdict(node) for node in self.nodes],
+            "edges": [
+                {"from": edge.from_id, "to": edge.to_id, "type": edge.type, "meta": edge.meta}
+                for edge in self.edges
+            ],
+        }
+
+
+def build_minimal_example_hpg() -> HPGGraph:
+    graph = HPGGraph()
+
+    space = SpaceNode(id="space:construction", label="construction", type="space")
+    obj = ObjectNode(id="object:segment:AB", label="segment:AB", type="object", meta={"object_type": "segment"})
+    view = ViewNode(
+        id="view:construction:segment:AB:generic",
+        label="segment:AB@generic",
+        type="view",
+        meta={"space": "construction", "role": "generic"},
+    )
+    proj = ProjectionNode(id="projection:hstep:0", label="Construct AB", type="projection")
+    fact = FactNode(id="fact:EqSeg(AB,AB)", label="EqSeg(AB,AB)", type="fact")
+    query = QueryNode(id="query:goal", label="Goal", type="query")
+
+    for node in (space, obj, view, proj, fact, query):
+        graph.add_node(node)
+
+    graph.add_edge(HPGEdge(from_id=proj.id, to_id=space.id, type=IN_SPACE))
+    graph.add_edge(HPGEdge(from_id=proj.id, to_id=view.id, type=CREATES))
+    graph.add_edge(HPGEdge(from_id=view.id, to_id=obj.id, type=INTERPRETS))
+    graph.add_edge(HPGEdge(from_id=view.id, to_id=obj.id, type=SHADOW_OF))
+    graph.add_edge(HPGEdge(from_id=proj.id, to_id=fact.id, type=ASSERTS))
+    graph.add_edge(HPGEdge(from_id=fact.id, to_id=query.id, type=SUPPORTS_GOAL))
+
+    return graph

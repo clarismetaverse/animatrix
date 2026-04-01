@@ -11,6 +11,20 @@ def test_export_graph_json() -> None:
     result = solve_prop9()
     hpg = result_to_hpg(result)
     graph = hpg_to_graph_json(hpg)
+
     assert graph["nodes"]
     assert graph["edges"]
-    assert any(edge["type"] in ("shadow_of", "creates", "asserts") for edge in graph["edges"])
+
+    node_types = {node["type"] for node in graph["nodes"]}
+    edge_types = {edge["type"] for edge in graph["edges"]}
+
+    assert "space" in node_types
+    assert "projection" in node_types
+    assert "fact" in node_types
+    assert "object" in node_types
+    assert "view" in node_types
+
+    assert "interprets" in edge_types
+
+    if result.target is not None:
+        assert "supports_goal" in edge_types
