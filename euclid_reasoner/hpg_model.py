@@ -20,22 +20,24 @@ EXPLORES = "explores"
 class HPGNode:
     id: str
     label: str
-    type: str
+    kind: str
     meta: Dict[str, str] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
 class SpaceNode(HPGNode):
-    pass
+    kind: str = "space"
 
 
 @dataclass(frozen=True)
 class ObjectNode(HPGNode):
+    kind: str = "object"
     object_type: str = ""
 
 
 @dataclass(frozen=True)
 class ViewNode(HPGNode):
+    kind: str = "view"
     role: str = ""
     object_id: str = ""
     space_id: str = ""
@@ -43,19 +45,21 @@ class ViewNode(HPGNode):
 
 @dataclass(frozen=True)
 class ProjectionNode(HPGNode):
+    kind: str = "projection"
     projection_type: str = ""
     space_id: str = ""
 
 
 @dataclass(frozen=True)
 class FactNode(HPGNode):
+    kind: str = "fact"
     fact_type: str = ""
     space_id: str = ""
 
 
 @dataclass(frozen=True)
 class QueryNode(HPGNode):
-    pass
+    kind: str = "query"
 
 
 @dataclass(frozen=True)
@@ -94,12 +98,11 @@ class HPGGraph:
 def build_minimal_example_hpg() -> HPGGraph:
     graph = HPGGraph()
 
-    space = SpaceNode(id="space:construction", label="construction", type="space")
-    obj = ObjectNode(id="object:segment:AB", label="segment:AB", type="object", object_type="segment")
+    space = SpaceNode(id="space:construction", label="construction")
+    obj = ObjectNode(id="object:segment:AB", label="segment:AB", object_type="segment")
     view = ViewNode(
         id="view:construction:segment:AB:generic",
         label="segment:AB@generic",
-        type="view",
         role="generic",
         object_id=obj.id,
         space_id=space.id,
@@ -107,18 +110,16 @@ def build_minimal_example_hpg() -> HPGGraph:
     proj = ProjectionNode(
         id="projection:hstep:0",
         label="Construct AB",
-        type="projection",
         projection_type="Construct",
         space_id=space.id,
     )
     fact = FactNode(
         id="fact:EqSeg(AB,AB)",
         label="EqSeg(AB,AB)",
-        type="fact",
         fact_type="EqSeg",
         space_id=space.id,
     )
-    query = QueryNode(id="query:goal", label="Goal", type="query")
+    query = QueryNode(id="query:goal", label="Goal")
 
     for node in (space, obj, view, proj, fact, query):
         graph.add_node(node)

@@ -44,7 +44,7 @@ def _infer_base_role(entity: str) -> str:
     if entity.startswith("triangle:"):
         return "triangle_instance"
     if entity.startswith("point:"):
-        return "constructed_point"
+        return "point_object"
     if entity.startswith("segment:"):
         return "segment_object"
     if entity.startswith("angle:"):
@@ -61,15 +61,25 @@ def _infer_role(entity: str, space: str) -> str:
             return "triangle_instance"
         if kind == "segment":
             return "triangle_side_candidate"
-    if space == "equilateral_space" and kind == "segment":
-        return "equal_side_candidate"
+        if kind == "point":
+            return "triangle_vertex_candidate"
+    if space == "equilateral_space":
+        if kind == "segment":
+            return "equal_side_candidate"
+        if kind == "point":
+            return "equilateral_vertex_candidate"
     if space == "congruence_space":
         if kind == "segment":
             return "congruence_participant"
         if kind == "triangle":
             return "congruence_triangle"
-    if space == "construction_space" and kind == "point":
-        return "constructed_point"
+        if kind == "angle":
+            return "congruence_angle"
+    if space == "construction_space":
+        if kind == "point":
+            return "constructed_point"
+        if kind == "segment":
+            return "constructed_segment"
 
     return role
 
@@ -85,32 +95,33 @@ def _ensure_object_and_view(graph: HPGGraph, *, entity: str, space: str) -> str:
     kind = _extract_object_kind(entity)
     role = _infer_role(entity, space)
     if kind is None:
+        object_id = f"object:{entity}"
+        graph.add_node(ObjectNode(id=object_id, label=entity, object_type="unknown"))
         view_id = f"view:{space}:{entity}:{role}"
         graph.add_node(
             ViewNode(
                 id=view_id,
                 label=f"{entity}@{role}",
-                type="view",
                 role=role,
-                object_id=f"object:{entity}",
+                object_id=object_id,
                 space_id=space,
                 meta={"entity": entity},
             )
         )
+        graph.add_edge(HPGEdge(from_id=view_id, to_id=object_id, type=INTERPRETS))
         return view_id
 
     object_id = f"object:{entity}"
-    graph.add_node(ObjectNode(id=object_id, label=entity, type="object", object_type=kind))
+    graph.add_node(ObjectNode(id=object_id, label=entity, object_type=kind))
 
     view_id = f"view:{space}:{entity}:{role}"
     graph.add_node(
-        ViewNode(
-            id=view_id,
-            label=f"{entity}@{role}",
-            type="view",
-            role=role,
-            object_id=object_id,
-            space_id=space,
+            ViewNode(
+                id=view_id,
+                label=f"{entity}@{role}",
+                role=role,
+                object_id=object_id,
+                space_id=space,
         )
     )
     graph.add_edge(HPGEdge(from_id=view_id, to_id=object_id, type=INTERPRETS))
@@ -131,10 +142,10 @@ def result_to_hpg(result: SearchResult) -> dict:
     graph = HPGGraph()
 
     query_id = "query:goal"
-    graph.add_node(QueryNode(id=query_id, label="Goal", type="query"))
+    graph.add_node(QueryNode(id=query_id, label="Goal"))
 
     for step in state.htrace:
-        graph.add_node(SpaceNode(id=step.space, label=step.space, type="space"))
+        graph.add_node(SpaceNode(id=step.space, label=step.space))
 
     latest_view_by_object: dict[str, tuple[str, str]] = {}
 
@@ -144,7 +155,6 @@ def result_to_hpg(result: SearchResult) -> dict:
             ProjectionNode(
                 id=projection_id,
                 label=step.label,
-                type="projection",
                 projection_type=step.prism,
                 space_id=step.space,
             )
@@ -185,7 +195,6 @@ def result_to_hpg(result: SearchResult) -> dict:
                 FactNode(
                     id=fact_id,
                     label=asserted,
-                    type="fact",
                     fact_type=_infer_fact_type(asserted),
                     space_id=step.space,
                 )
@@ -200,7 +209,6 @@ def result_to_hpg(result: SearchResult) -> dict:
                 FactNode(
                     id=fact_id,
                     label=rewritten,
-                    type="fact",
                     fact_type=_infer_fact_type(rewritten),
                     space_id=step.space,
                 )
@@ -211,7 +219,7 @@ def result_to_hpg(result: SearchResult) -> dict:
 
         for parent in step.parents:
             parent_projection_id = f"projection:{parent}"
-            graph.add_node(ProjectionNode(id=parent_projection_id, label=parent, type="projection"))
+            graph.add_node(ProjectionNode(id=parent_projection_id, label=parent))
             graph.add_edge(HPGEdge(from_id=parent_projection_id, to_id=projection_id, type=DERIVES))
 
     return graph.to_dict()
@@ -223,8 +231,8 @@ def hpg_to_graph_json(hpg: dict) -> dict:
 
 def hpg_to_opml(hpg: dict) -> str:
     node_labels = {node["id"]: node.get("label", node["id"]) for node in hpg.get("nodes", [])}
-    projections = [node for node in hpg.get("nodes", []) if node.get("type") == "projection"]
-    facts = [node for node in hpg.get("nodes", []) if node.get("type") == "fact"]
+    projections = [node for node in hpg.get("nodes", []) if node.get("kind") == "projection"]
+    facts = [node for node in hpg.get("nodes", []) if node.get("kind") == "fact"]
 
     lines = [
         '<?xml version="1.0" encoding="UTF-8"?>',
