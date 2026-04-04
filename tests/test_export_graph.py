@@ -133,3 +133,15 @@ def test_goal_support_edge_is_unique_per_fact_query_pair() -> None:
     edge_pairs = {(edge["from"], edge["to"]) for edge in supports_goal_edges}
 
     assert len(edge_pairs) == len(supports_goal_edges)
+
+
+def test_fact_space_nodes_are_marked_auxiliary() -> None:
+    result = solve_prop9()
+    hpg = result_to_hpg(result)
+
+    fact_space = next(node for node in hpg["nodes"] if node["kind"] == "space" and node["id"] == "fact_space")
+    assert fact_space["meta"].get("auxiliary") == "true"
+
+    fact_space_views = [node for node in hpg["nodes"] if node["kind"] == "view" and node.get("space_id") == "fact_space"]
+    assert fact_space_views
+    assert any(node["meta"].get("auxiliary") == "true" for node in fact_space_views)
