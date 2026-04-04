@@ -60,6 +60,17 @@ h1 {
   margin-bottom: 8px;
 }
 
+.step-picker {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.step-picker-label {
+  font-size: 13px;
+  display: block;
+  margin-bottom: 4px;
+}
+
 .checkbox-row {
   display: block;
   margin: 4px 0;
@@ -100,4 +111,9 @@ h1 {
 .muted {
   color: #64748b;
   font-size: 12px;
+}
+
+.compact-panel {
+  padding: 8px;
+  margin-bottom: 10px;
 }
