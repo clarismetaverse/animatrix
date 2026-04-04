@@ -75,3 +75,29 @@ def test_unknown_entity_creates_object_and_view_pair() -> None:
     assert view_nodes[0]["kind"] == "view"
     assert view_nodes[0]["object_id"] == unknown_object_id
     assert interpreting_edges
+
+
+def test_prop9_hpg_contains_micro_sss_and_angle_goal_support() -> None:
+    result = solve_prop9()
+    hpg = result_to_hpg(result)
+
+    object_nodes = [node for node in hpg["nodes"] if node["kind"] == "object"]
+    fact_nodes = [node for node in hpg["nodes"] if node["kind"] == "fact"]
+    supports_goal_edges = [edge for edge in hpg["edges"] if edge["type"] == "supports_goal"]
+
+    triangle_objects = [n for n in object_nodes if n.get("object_type") == "triangle"]
+    assert len(triangle_objects) >= 2
+
+    eqseg_facts = [n for n in fact_nodes if n.get("fact_type") == "EqSeg"]
+    congruent_facts = [n for n in fact_nodes if n.get("fact_type") == "Congruent"]
+    eqang_facts = [n for n in fact_nodes if n.get("fact_type") == "EqAng"]
+
+    assert len(eqseg_facts) >= 3
+    assert len(congruent_facts) >= 1
+    assert len(eqang_facts) >= 1
+
+    goal_supported_by = {edge["from"] for edge in supports_goal_edges}
+    assert goal_supported_by
+    for fact_id in goal_supported_by:
+        fact_node = next(node for node in fact_nodes if node["id"] == fact_id)
+        assert fact_node["fact_type"] == "EqAng"
