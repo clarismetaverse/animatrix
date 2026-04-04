@@ -75,6 +75,7 @@ class HPGGraph:
     nodes: List[HPGNode] = field(default_factory=list)
     edges: List[HPGEdge] = field(default_factory=list)
     _node_ids: set[str] = field(default_factory=set, init=False, repr=False)
+    _edge_keys: set[tuple[str, str, str]] = field(default_factory=set, init=False, repr=False)
 
     def add_node(self, node: HPGNode) -> None:
         if node.id in self._node_ids:
@@ -83,6 +84,10 @@ class HPGGraph:
         self.nodes.append(node)
 
     def add_edge(self, edge: HPGEdge) -> None:
+        edge_key = (edge.from_id, edge.to_id, edge.type)
+        if edge_key in self._edge_keys:
+            return
+        self._edge_keys.add(edge_key)
         self.edges.append(edge)
 
     def to_dict(self) -> dict:

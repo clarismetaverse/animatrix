@@ -101,3 +101,37 @@ def test_prop9_hpg_contains_micro_sss_and_angle_goal_support() -> None:
     for fact_id in goal_supported_by:
         fact_node = next(node for node in fact_nodes if node["id"] == fact_id)
         assert fact_node["fact_type"] == "EqAng"
+
+
+def test_hpg_edges_are_globally_deduplicated() -> None:
+    result = solve_prop9()
+    hpg = result_to_hpg(result)
+
+    edge_keys = {(edge["from"], edge["to"], edge["type"]) for edge in hpg["edges"]}
+    assert len(edge_keys) == len(hpg["edges"])
+
+
+def test_ray_entities_are_typed_as_rays() -> None:
+    state = State()
+    state.add_step(
+        prism="RayEntityPrism",
+        label="Touch rays directly",
+        space="construction_space",
+        creates=["ray:BA", "ray:BC"],
+    )
+
+    hpg = result_to_hpg(SearchResult(solved=False, state=state, target=None))
+
+    ray_objects = [node for node in hpg["nodes"] if node["kind"] == "object" and node["id"] in {"object:ray:BA", "object:ray:BC"}]
+    assert len(ray_objects) == 2
+    assert {node["object_type"] for node in ray_objects} == {"ray"}
+
+
+def test_goal_support_edge_is_unique_per_fact_query_pair() -> None:
+    result = solve_prop9()
+    hpg = result_to_hpg(result)
+
+    supports_goal_edges = [edge for edge in hpg["edges"] if edge["type"] == "supports_goal"]
+    edge_pairs = {(edge["from"], edge["to"]) for edge in supports_goal_edges}
+
+    assert len(edge_pairs) == len(supports_goal_edges)
