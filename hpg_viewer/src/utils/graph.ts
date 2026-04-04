@@ -25,6 +25,19 @@ const edgeStyleMap: Record<string, Partial<Edge>> = {
 };
 
 export const KNOWN_NODE_KINDS = ['space', 'object', 'view', 'projection', 'fact', 'query'];
+const PROOF_STEP_ID = /^projection:hstep:(\d+)$/;
+
+export interface TimelineStep {
+  step: number;
+  nodeId: string;
+  label: string;
+}
+
+interface StepFilterResult {
+  graph: HPGGraph;
+  newNodeIds: Set<string>;
+  newEdgeIds: Set<string>;
+}
 
 export const getDefaultKindVisibility = (nodes: HPGNode[]): KindVisibility =>
   nodes.reduce<KindVisibility>((acc, node) => {
@@ -77,6 +90,75 @@ const edgeToFlowEdge = (edge: HPGEdge, highlighted: boolean): Edge => {
   };
 };
 
+const getEdgeKey = (edge: HPGEdge) => `${edge.from}-${edge.to}-${edge.type}`;
+
+const getVisibleNodeIdsUpToStep = (graph: HPGGraph, step: number): Set<string> => {
+  const nodeById = new Map(graph.nodes.map((node) => [node.id, node]));
+  const projectionIds = new Set(
+    graph.nodes
+      .filter((node) => {
+        const match = PROOF_STEP_ID.exec(node.id);
+        return node.kind === 'projection' && match && Number(match[1]) <= step;
+      })
+      .map((node) => node.id),
+  );
+
+  const visible = new Set(projectionIds);
+
+  graph.edges.forEach((edge) => {
+    if (projectionIds.has(edge.from) || projectionIds.has(edge.to)) {
+      visible.add(edge.from);
+      visible.add(edge.to);
+    }
+  });
+
+  graph.edges.forEach((edge) => {
+    const from = nodeById.get(edge.from);
+    const to = nodeById.get(edge.to);
+    if (!from || !to) return;
+    if (visible.has(edge.from) && (to.kind === 'space' || to.kind === 'query')) visible.add(edge.to);
+    if (visible.has(edge.to) && (from.kind === 'space' || from.kind === 'query')) visible.add(edge.from);
+  });
+
+  return visible;
+};
+
+export const getTimelineSteps = (graph: HPGGraph): TimelineStep[] =>
+  graph.nodes
+    .map((node) => {
+      const match = PROOF_STEP_ID.exec(node.id);
+      if (!match || node.kind !== 'projection') return null;
+      return {
+        step: Number(match[1]),
+        nodeId: node.id,
+        label: node.label?.trim() || node.id,
+      } as TimelineStep;
+    })
+    .filter((step): step is TimelineStep => Boolean(step))
+    .sort((a, b) => a.step - b.step);
+
+export const filterGraphByStep = (graph: HPGGraph, step: number | null, showFullGraph: boolean): StepFilterResult => {
+  if (showFullGraph || step === null) {
+    return { graph, newNodeIds: new Set<string>(), newEdgeIds: new Set<string>() };
+  }
+
+  const visibleNow = getVisibleNodeIdsUpToStep(graph, step);
+  const visiblePrev = step > 0 ? getVisibleNodeIdsUpToStep(graph, step - 1) : new Set<string>();
+
+  const nodes = graph.nodes.filter((node) => visibleNow.has(node.id));
+  const edges = graph.edges.filter((edge) => visibleNow.has(edge.from) && visibleNow.has(edge.to));
+
+  const newNodeIds = new Set([...visibleNow].filter((id) => !visiblePrev.has(id)));
+  const prevEdgeKeys = new Set(
+    graph.edges
+      .filter((edge) => visiblePrev.has(edge.from) && visiblePrev.has(edge.to))
+      .map((edge) => getEdgeKey(edge)),
+  );
+  const newEdgeIds = new Set(edges.map((edge) => getEdgeKey(edge)).filter((key) => !prevEdgeKeys.has(key)));
+
+  return { graph: { nodes, edges }, newNodeIds, newEdgeIds };
+};
+
 export const getGoalHighlightSet = (graph: HPGGraph): Set<string> => {
   const queryIds = new Set(graph.nodes.filter((n) => n.kind === 'query').map((n) => n.id));
   const highlighted = new Set<string>(queryIds);
@@ -115,12 +197,40 @@ export const filterGraph = (
   return { nodes, edges };
 };
 
-export const toFlowElements = (graph: HPGGraph, highlightGoalPath: boolean) => {
+export const toFlowElements = (
+  graph: HPGGraph,
+  highlightGoalPath: boolean,
+  emphasis?: { newNodeIds?: Set<string>; newEdgeIds?: Set<string> },
+) => {
   const highlighted = highlightGoalPath ? getGoalHighlightSet(graph) : new Set<string>();
-  const nodes = graph.nodes.map((node) => nodeToFlowNode(node, highlighted.has(node.id)));
-  const edges = graph.edges.map((edge) =>
-    edgeToFlowEdge(edge, highlighted.has(edge.from) && highlighted.has(edge.to) && edge.type === 'supports_goal'),
-  );
+  const newNodeIds = emphasis?.newNodeIds ?? new Set<string>();
+  const newEdgeIds = emphasis?.newEdgeIds ?? new Set<string>();
+  const nodes = graph.nodes.map((node) => {
+    const flowNode = nodeToFlowNode(node, highlighted.has(node.id));
+    if (!newNodeIds.has(node.id)) return flowNode;
+    return {
+      ...flowNode,
+      style: {
+        ...flowNode.style,
+        borderWidth: 3,
+        boxShadow: '0 0 0 4px rgba(14,165,233,0.28)',
+      },
+    };
+  });
+  const edges = graph.edges.map((edge) => {
+    const flowEdge = edgeToFlowEdge(
+      edge,
+      highlighted.has(edge.from) && highlighted.has(edge.to) && edge.type === 'supports_goal',
+    );
+    if (!newEdgeIds.has(getEdgeKey(edge))) return flowEdge;
+    return {
+      ...flowEdge,
+      style: {
+        ...(flowEdge.style ?? {}),
+        strokeWidth: 3.6,
+      },
+    };
+  });
 
   const dagreGraph = new dagre.graphlib.Graph();
   dagreGraph.setDefaultEdgeLabel(() => ({}));

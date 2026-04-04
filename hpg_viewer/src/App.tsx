@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ReactFlow, { Background, Controls, MiniMap, ReactFlowInstance } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { ControlsPanel } from './components/ControlsPanel';
@@ -9,8 +9,10 @@ import { EdgeVisibility, HPGGraph, HPGNode, KindVisibility } from './types';
 import {
   downloadFilteredGraph,
   filterGraph,
+  filterGraphByStep,
   getDefaultEdgeVisibility,
   getDefaultKindVisibility,
+  getTimelineSteps,
   toFlowElements,
 } from './utils/graph';
 
@@ -30,17 +32,55 @@ function App() {
   const [search, setSearch] = useState('');
   const [highlightGoalPath, setHighlightGoalPath] = useState(true);
   const [jsonInput, setJsonInput] = useState('');
+  const [currentStep, setCurrentStep] = useState<number | null>(null);
+  const [showFullGraph, setShowFullGraph] = useState(true);
 
   const [kindVisibility, setKindVisibility] = useState<KindVisibility>(() => getDefaultKindVisibility(sampleData.nodes));
   const [edgeVisibility, setEdgeVisibility] = useState<EdgeVisibility>(() => getDefaultEdgeVisibility(sampleData.edges));
 
   const flowRef = useRef<ReactFlowInstance | null>(null);
+  const timelineSteps = useMemo(() => getTimelineSteps(graph), [graph]);
+
+  useEffect(() => {
+    if (!timelineSteps.length) {
+      setCurrentStep(null);
+      setShowFullGraph(true);
+      return;
+    }
+    const maxStep = timelineSteps[timelineSteps.length - 1].step;
+    setCurrentStep(maxStep);
+    setShowFullGraph(false);
+  }, [timelineSteps]);
+
+  const timelineFiltered = useMemo(
+    () => filterGraphByStep(graph, currentStep, showFullGraph || !timelineSteps.length),
+    [graph, currentStep, showFullGraph, timelineSteps.length],
+  );
 
   const filteredGraph = useMemo(
-    () => filterGraph(graph, kindVisibility, edgeVisibility, search),
-    [graph, kindVisibility, edgeVisibility, search],
+    () => filterGraph(timelineFiltered.graph, kindVisibility, edgeVisibility, search),
+    [timelineFiltered.graph, kindVisibility, edgeVisibility, search],
   );
-  const flowData = useMemo(() => toFlowElements(filteredGraph, highlightGoalPath), [filteredGraph, highlightGoalPath]);
+  const visibleNodeIds = useMemo(() => new Set(filteredGraph.nodes.map((node) => node.id)), [filteredGraph.nodes]);
+  const visibleEdgeIds = useMemo(
+    () =>
+      new Set(
+        filteredGraph.edges.map((edge) => `${edge.from}-${edge.to}-${edge.type}`),
+      ),
+    [filteredGraph.edges],
+  );
+  const flowData = useMemo(
+    () =>
+      toFlowElements(filteredGraph, highlightGoalPath, {
+        newNodeIds: new Set([...timelineFiltered.newNodeIds].filter((id) => visibleNodeIds.has(id))),
+        newEdgeIds: new Set([...timelineFiltered.newEdgeIds].filter((id) => visibleEdgeIds.has(id))),
+      }),
+    [filteredGraph, highlightGoalPath, timelineFiltered.newNodeIds, timelineFiltered.newEdgeIds, visibleEdgeIds, visibleNodeIds],
+  );
+  const currentStepMeta = useMemo(
+    () => timelineSteps.find((step) => step.step === currentStep) ?? null,
+    [timelineSteps, currentStep],
+  );
 
   const resetFilters = useCallback(() => {
     setSearch('');
@@ -98,6 +138,56 @@ function App() {
             onFitView={() => flowRef.current?.fitView({ padding: 0.2, duration: 300 })}
             onExport={() => downloadFilteredGraph(filteredGraph)}
           />
+          {timelineSteps.length > 0 && (
+            <section className="panel">
+              <h4>Proof timeline</h4>
+              <div className="button-row">
+                <button
+                  onClick={() => setCurrentStep((prev) => (prev === null ? 0 : Math.max(0, prev - 1)))}
+                  disabled={showFullGraph || currentStep === null || currentStep <= timelineSteps[0].step}
+                >
+                  Previous
+                </button>
+                <button
+                  onClick={() =>
+                    setCurrentStep((prev) =>
+                      prev === null ? timelineSteps[0].step : Math.min(timelineSteps[timelineSteps.length - 1].step, prev + 1),
+                    )
+                  }
+                  disabled={
+                    showFullGraph ||
+                    currentStep === null ||
+                    currentStep >= timelineSteps[timelineSteps.length - 1].step
+                  }
+                >
+                  Next
+                </button>
+              </div>
+              <label className="step-picker-label" htmlFor="step-picker">
+                Step
+              </label>
+              <select
+                id="step-picker"
+                className="step-picker"
+                value={currentStep ?? timelineSteps[timelineSteps.length - 1].step}
+                onChange={(event) => setCurrentStep(Number(event.target.value))}
+                disabled={showFullGraph}
+              >
+                {timelineSteps.map((step) => (
+                  <option key={step.nodeId} value={step.step}>
+                    {step.step}: {step.label}
+                  </option>
+                ))}
+              </select>
+              <label className="checkbox-row">
+                <input type="checkbox" checked={showFullGraph} onChange={() => setShowFullGraph((prev) => !prev)} /> show
+                full graph
+              </label>
+              <p className="muted">
+                {currentStepMeta ? `Step ${currentStepMeta.step}: ${currentStepMeta.label}` : 'Select a step to inspect proof growth.'}
+              </p>
+            </section>
+          )}
 
           <Legend />
 
@@ -133,7 +223,7 @@ function App() {
           </ReactFlow>
         </main>
 
-        <Sidebar node={selectedNode} />
+        <Sidebar node={selectedNode} step={currentStepMeta} />
       </div>
     </div>
   );
