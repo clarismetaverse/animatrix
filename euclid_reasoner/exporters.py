@@ -160,6 +160,11 @@ def _fact_id(label: str) -> str:
     return f"fact:{label}"
 
 
+def _add_supports_goal_edge(graph: HPGGraph, *, fact_label: str, query_id: str, target: Optional[Tuple[Angle, Angle]]) -> None:
+    if _fact_matches_target(fact_label, target):
+        graph.add_edge(HPGEdge(from_id=_fact_id(fact_label), to_id=query_id, type=SUPPORTS_GOAL))
+
+
 def _add_fact_node(
     graph: HPGGraph,
     *,
@@ -281,8 +286,7 @@ def result_to_hpg(result: SearchResult) -> dict:
                 derived_from=fact_derived_from.get(asserted),
             )
             graph.add_edge(HPGEdge(from_id=projection_id, to_id=fact_id, type=ASSERTS))
-            if _fact_matches_target(asserted, result.target):
-                graph.add_edge(HPGEdge(from_id=fact_id, to_id=query_id, type=SUPPORTS_GOAL))
+            _add_supports_goal_edge(graph, fact_label=asserted, query_id=query_id, target=result.target)
 
         for rewritten in step.rewrites:
             fact_id = _fact_id(rewritten)
@@ -298,8 +302,7 @@ def result_to_hpg(result: SearchResult) -> dict:
                 derived_from=fact_derived_from.get(rewritten),
             )
             graph.add_edge(HPGEdge(from_id=projection_id, to_id=fact_id, type=REWRITES))
-            if _fact_matches_target(rewritten, result.target):
-                graph.add_edge(HPGEdge(from_id=fact_id, to_id=query_id, type=SUPPORTS_GOAL))
+            _add_supports_goal_edge(graph, fact_label=rewritten, query_id=query_id, target=result.target)
 
         for derived in step.derived_facts:
             _add_fact_node(
@@ -310,8 +313,7 @@ def result_to_hpg(result: SearchResult) -> dict:
                 derived_from=set(step.used_facts),
             )
             graph.add_edge(HPGEdge(from_id=projection_id, to_id=_fact_id(derived), type=DERIVES))
-            if _fact_matches_target(derived, result.target):
-                graph.add_edge(HPGEdge(from_id=_fact_id(derived), to_id=query_id, type=SUPPORTS_GOAL))
+            _add_supports_goal_edge(graph, fact_label=derived, query_id=query_id, target=result.target)
 
         for parent in step.parents:
             parent_projection_id = f"projection:{parent}"
@@ -354,8 +356,7 @@ def result_to_hpg(result: SearchResult) -> dict:
             origin=fact_origins.get(label, "inference"),
             derived_from=fact_derived_from.get(label),
         )
-        if _fact_matches_target(label, result.target):
-            graph.add_edge(HPGEdge(from_id=_fact_id(label), to_id=query_id, type=SUPPORTS_GOAL))
+        _add_supports_goal_edge(graph, fact_label=label, query_id=query_id, target=result.target)
 
     return graph.to_dict()
 

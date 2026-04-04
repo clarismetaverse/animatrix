@@ -29,6 +29,7 @@ def test_export_graph_json() -> None:
 
     assert "interprets" in edge_types
     assert "reinterprets" in edge_types or "explores" in edge_types
+    assert "supports_goal" in edge_types
 
     interpreting_edges = [edge for edge in graph["edges"] if edge["type"] == "interprets"]
     shadow_edges = [edge for edge in graph["edges"] if edge["type"] == "shadow_of"]
@@ -42,9 +43,6 @@ def test_export_graph_json() -> None:
     assert any(node.get("projection_type") and node.get("space_id") for node in projection_nodes)
     object_nodes = [node for node in graph["nodes"] if node["kind"] == "object"]
     assert any(node.get("object_type") for node in object_nodes)
-
-    if result.target is not None:
-        assert "supports_goal" in edge_types
 
 
 def test_unknown_entity_creates_object_and_view_pair() -> None:
