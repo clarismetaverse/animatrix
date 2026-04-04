@@ -97,12 +97,14 @@ def _ensure_object_and_view(graph: HPGGraph, *, entity: str, space: str) -> str:
     kind = _extract_object_kind(entity)
     role = _infer_role(entity, space)
     view_meta: Dict[str, str] = {}
+    object_meta: Dict[str, str] = {}
     if space == "fact_space":
         view_meta["auxiliary"] = "true"
+        object_meta["auxiliary"] = "true"
 
     if kind is None:
         object_id = f"object:{entity}"
-        graph.add_node(ObjectNode(id=object_id, label=entity, object_type="unknown"))
+        graph.add_node(ObjectNode(id=object_id, label=entity, object_type="unknown", meta=object_meta))
         view_id = f"view:{space}:{entity}:{role}"
         graph.add_node(
             ViewNode(
@@ -118,7 +120,7 @@ def _ensure_object_and_view(graph: HPGGraph, *, entity: str, space: str) -> str:
         return view_id
 
     object_id = f"object:{entity}"
-    graph.add_node(ObjectNode(id=object_id, label=entity, object_type=kind))
+    graph.add_node(ObjectNode(id=object_id, label=entity, object_type=kind, meta=object_meta))
 
     view_id = f"view:{space}:{entity}:{role}"
     graph.add_node(
