@@ -162,6 +162,11 @@ class State:
         creates: Optional[List[str]] = None,
         asserts: Optional[List[str]] = None,
         rewrites: Optional[List[str]] = None,
+        used_facts: Optional[List[str]] = None,
+        created_objects: Optional[List[str]] = None,
+        derived_facts: Optional[List[str]] = None,
+        phase: str = "",
+        granularity: str = "macro",
         parents: Optional[List[str]] = None,
         meta: Optional[Dict[str, Any]] = None,
     ) -> None:
@@ -178,6 +183,11 @@ class State:
                 creates=creates or [],
                 asserts=asserts or [],
                 rewrites=rewrites or [],
+                used_facts=used_facts or [],
+                created_objects=created_objects or [],
+                derived_facts=derived_facts or [],
+                phase=phase,
+                granularity=granularity,
                 parents=parents or [],
                 meta={k: str(v) for k, v in (meta or {}).items()},
             )

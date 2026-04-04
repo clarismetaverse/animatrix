@@ -8,6 +8,7 @@ from .core import (
     Segment,
     State,
     Triangle,
+    triangle_sides,
     derive_angles_from_congruence,
     match_sss,
 )
@@ -50,6 +51,11 @@ class ChoosePointOnRayBA(Prism):
                     uses=["ray:BA"],
                     creates=[f"point:{point}"],
                     asserts=[f"OnRay({point},BA)"],
+                    used_facts=[],
+                    created_objects=[f"point:{point}"],
+                    derived_facts=[],
+                    phase="construction",
+                    granularity="micro",
                 )
 
                 results.append(PrismResult(new_state, label))
@@ -81,12 +87,17 @@ class CopyLengthToRayBC(Prism):
                     prism=self.name,
                     label=label,
                     space="construction_space",
-                    uses=[f"point:{point}", "ray:BC"],
+                    uses=[f"point:{point}", f"segment:{seg_bd}", "ray:BC"],
                     creates=[f"point:{target}"],
                     asserts=[
                         f"OnRay({target},BC)",
                         f"EqSeg({seg_bd},{seg_be})",
                     ],
+                    used_facts=[f"OnRay({point},BA)"],
+                    created_objects=[f"point:{target}", f"segment:{seg_be}"],
+                    derived_facts=[],
+                    phase="construction",
+                    granularity="micro",
                 )
 
                 results.append(PrismResult(new_state, label))
@@ -111,18 +122,31 @@ class EquilateralOnSegment(Prism):
                 new_state = state.copy()
                 seg_df = Segment(d, apex)
                 seg_ef = Segment(e, apex)
+                tri = Triangle(f"T_eq_{d}{e}{apex}", (d, e, apex))
 
                 if new_state.facts.add_eqseg(seg_df, seg_ef):
                     new_state.mode = "EquilateralField"
+                    if tri not in new_state.triangles:
+                        new_state.triangles.append(tri)
                     label = f"Construct equilateral on {d}{e} -> apex {apex}"
 
                     new_state.add_step(
                         prism=self.name,
                         label=label,
                         space="equilateral_space",
-                        uses=[f"point:{d}", f"point:{e}"],
-                        creates=[f"point:{apex}"],
+                        uses=[f"point:{d}", f"point:{e}", f"segment:{Segment(d, e)}"],
+                        creates=[f"point:{apex}", f"triangle:{tri.name}"],
                         asserts=[f"EqSeg({seg_df},{seg_ef})"],
+                        used_facts=[f"OnRay({d},BA)", f"OnRay({e},BC)"],
+                        created_objects=[
+                            f"point:{apex}",
+                            f"segment:{seg_df}",
+                            f"segment:{seg_ef}",
+                            f"triangle:{tri.name}",
+                        ],
+                        derived_facts=[],
+                        phase="construction",
+                        granularity="micro",
                     )
 
                     results.append(PrismResult(new_state, label))
@@ -160,9 +184,24 @@ class InstantiateComparisonTriangles(Prism):
                     prism=self.name,
                     label=label,
                     space="triangle_space",
-                    uses=[f"point:{d}", f"point:{e}", f"point:{apex}"],
+                    uses=[
+                        f"point:{d}",
+                        f"point:{e}",
+                        f"point:{apex}",
+                        f"segment:{Segment('B', d)}",
+                        f"segment:{Segment('B', e)}",
+                        f"segment:{Segment('B', apex)}",
+                    ],
                     creates=[f"triangle:{t1.name}", f"triangle:{t2.name}"],
                     asserts=[f"EqSeg(B{apex},B{apex})"],
+                    used_facts=[
+                        f"OnRay({d},BA)",
+                        f"OnRay({e},BC)",
+                    ],
+                    created_objects=[f"triangle:{t1.name}", f"triangle:{t2.name}"],
+                    derived_facts=[],
+                    phase="triangle_instantiation",
+                    granularity="micro",
                 )
 
                 results.append(PrismResult(new_state, label))
@@ -195,6 +234,9 @@ class CongruenceSSSPrism(Prism):
                 new_state.mode = "CongruenceField"
 
                 derived = derive_angles_from_congruence(t1.vertices, mapping)
+                sides1 = triangle_sides(t1.vertices)
+                sides2 = triangle_sides(tuple(b for _, b in mapping))
+                sss_equalities = [f"EqSeg({s1},{s2})" for s1, s2 in zip(sides1, sides2)]
                 for ang1, ang2 in derived:
                     new_state.facts.add_eqang(ang1, ang2)
 
@@ -204,10 +246,20 @@ class CongruenceSSSPrism(Prism):
                     prism=self.name,
                     label=label,
                     space="congruence_space",
-                    uses=[f"triangle:{t1.name}", f"triangle:{t2.name}"],
+                    uses=[
+                        f"triangle:{t1.name}",
+                        f"triangle:{t2.name}",
+                        *[f"segment:{s}" for s in sides1],
+                        *[f"segment:{s}" for s in sides2],
+                    ],
                     creates=[],
                     asserts=[f"Congruent({t1.name},{t2.name})"],
                     rewrites=[f"EqAng({a1},{a2})" for (a1, a2) in derived],
+                    used_facts=sss_equalities,
+                    created_objects=[],
+                    derived_facts=[f"EqAng({a1},{a2})" for (a1, a2) in derived],
+                    phase="inference",
+                    granularity="micro",
                 )
 
                 results.append(PrismResult(new_state, label))
