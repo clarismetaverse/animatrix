@@ -27,7 +27,7 @@ from .types import SearchResult
 
 
 def _extract_object_kind(entity: str) -> Optional[str]:
-    for prefix in ("triangle:", "point:", "segment:", "angle:"):
+    for prefix in ("triangle:", "point:", "segment:", "angle:", "ray:"):
         if entity.startswith(prefix):
             return prefix[:-1]
     return None
@@ -49,6 +49,8 @@ def _infer_base_role(entity: str) -> str:
         return "segment_object"
     if entity.startswith("angle:"):
         return "angle_object"
+    if entity.startswith("ray:"):
+        return "ray_object"
     return "generic"
 
 
@@ -94,6 +96,10 @@ def _ensure_object_and_view(graph: HPGGraph, *, entity: str, space: str) -> str:
 
     kind = _extract_object_kind(entity)
     role = _infer_role(entity, space)
+    view_meta: Dict[str, str] = {}
+    if space == "fact_space":
+        view_meta["auxiliary"] = "true"
+
     if kind is None:
         object_id = f"object:{entity}"
         graph.add_node(ObjectNode(id=object_id, label=entity, object_type="unknown"))
@@ -105,7 +111,7 @@ def _ensure_object_and_view(graph: HPGGraph, *, entity: str, space: str) -> str:
                 role=role,
                 object_id=object_id,
                 space_id=space,
-                meta={"entity": entity},
+                meta={"entity": entity, **view_meta},
             )
         )
         graph.add_edge(HPGEdge(from_id=view_id, to_id=object_id, type=INTERPRETS))
@@ -122,6 +128,7 @@ def _ensure_object_and_view(graph: HPGGraph, *, entity: str, space: str) -> str:
                 role=role,
                 object_id=object_id,
                 space_id=space,
+                meta=view_meta,
         )
     )
     graph.add_edge(HPGEdge(from_id=view_id, to_id=object_id, type=INTERPRETS))
@@ -177,7 +184,7 @@ def _add_fact_node(
 
 def _materialize_final_entities(graph: HPGGraph, result: SearchResult) -> None:
     state = result.state
-    graph.add_node(SpaceNode(id="fact_space", label="fact_space"))
+    graph.add_node(SpaceNode(id="fact_space", label="fact_space", meta={"auxiliary": "true"}))
 
     for on_ray in state.facts.on_rays:
         _ensure_object_and_view(graph, entity=f"point:{on_ray.point}", space="fact_space")
@@ -223,6 +230,7 @@ def result_to_hpg(result: SearchResult) -> dict:
                 label=step.label,
                 projection_type=step.prism,
                 space_id=step.space,
+                meta={"phase": step.phase},
             )
         )
         graph.add_edge(HPGEdge(from_id=projection_id, to_id=step.space, type=IN_SPACE))
