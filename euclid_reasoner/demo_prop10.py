@@ -15,13 +15,18 @@ def solve_prop10(beam_k: int = 20, steps: int = 10) -> SearchResult:
 
 def find_prop10_goal(state: State) -> Optional[Tuple[Segment, Segment]]:
     """
-    Look for a midpoint-like equality:
-    two equal segments sharing exactly one endpoint,
-    with the other endpoints distinct.
-
-    Example recognized pattern:
-      EqSeg(AD, DB)
+    Find a midpoint-like structure:
+    - seg1 == seg2
+    - they share exactly one endpoint (candidate midpoint)
+    - the other endpoints lie on the same ray
+      (so the two equal segments can be read as two local views
+       of a single parent segment being cut)
     """
+
+    point_to_ray = {}
+    for fact in state.facts.on_rays:
+        point_to_ray[fact.point] = fact.ray
+
     for seg1, seg2 in sorted(state.facts.eq_segs, key=lambda pair: (str(pair[0]), str(pair[1]))):
         pts1 = {seg1.p, seg1.q}
         pts2 = {seg2.p, seg2.q}
@@ -33,7 +38,13 @@ def find_prop10_goal(state: State) -> Optional[Tuple[Segment, Segment]]:
         other1 = (pts1 - common).pop()
         other2 = (pts2 - common).pop()
 
-        if other1 != other2:
+        if other1 == other2:
+            continue
+
+        ray1 = point_to_ray.get(other1)
+        ray2 = point_to_ray.get(other2)
+
+        if ray1 is not None and ray1 == ray2:
             return seg1, seg2
 
     return None
