@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from typing import List
+from typing import List, Optional, Tuple
 
-from .core import State
+from .core import Segment, State
 from .prisms import all_prisms
 from .search import beam_search
 from .types import SearchResult
@@ -13,18 +13,41 @@ def solve_prop10(beam_k: int = 20, steps: int = 10) -> SearchResult:
     return beam_search(start, prisms=all_prisms(), beam_k=beam_k, steps=steps)
 
 
+def find_prop10_goal(state: State) -> Optional[Tuple[Segment, Segment]]:
+    """
+    Look for a midpoint-like equality:
+    two equal segments sharing exactly one endpoint,
+    with the other endpoints distinct.
+
+    Example recognized pattern:
+      EqSeg(AD, DB)
+    """
+    for seg1, seg2 in sorted(state.facts.eq_segs, key=lambda pair: (str(pair[0]), str(pair[1]))):
+        pts1 = {seg1.p, seg1.q}
+        pts2 = {seg2.p, seg2.q}
+
+        common = pts1 & pts2
+        if len(common) != 1:
+            continue
+
+        other1 = (pts1 - common).pop()
+        other2 = (pts2 - common).pop()
+
+        if other1 != other2:
+            return seg1, seg2
+
+    return None
+
+
 def _format_facts(state: State) -> List[str]:
     lines: List[str] = []
 
-    # OnRay facts
     for on_ray in sorted(state.facts.on_rays, key=lambda r: (r.ray, r.point)):
         lines.append(f"OnRay({on_ray.point}, {on_ray.ray})")
 
-    # EqSeg facts (IMPORTANT for Prop. 10)
     for seg1, seg2 in sorted(state.facts.eq_segs, key=lambda pair: (str(pair[0]), str(pair[1]))):
         lines.append(f"EqSeg({seg1}, {seg2})")
 
-    # Congruence facts
     for t in sorted(state.facts.congruent, key=lambda c: (c.t1.name, c.t2.name)):
         mapping = ",".join([f"{a}->{b}" for a, b in t.mapping])
         lines.append(f"Congruent({t.t1},{t.t2},[{mapping}])")
@@ -34,13 +57,20 @@ def _format_facts(state: State) -> List[str]:
 
 def main() -> None:
     result = solve_prop10()
+    prop10_goal = find_prop10_goal(result.state)
 
-    print(f"Solved? {result.solved}")
+    print(f"Solved by beam search? {result.solved}")
 
     if result.target:
-        print(f"Target: {result.target}")
+        print(f"Native target: {result.target}")
     else:
-        print("Target: None")
+        print("Native target: None")
+
+    if prop10_goal:
+        seg1, seg2 = prop10_goal
+        print(f"Prop10-style goal found: EqSeg({seg1}, {seg2})")
+    else:
+        print("Prop10-style goal found: None")
 
     print("Trace:")
     for step in result.state.trace:
