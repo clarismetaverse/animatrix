@@ -62,6 +62,9 @@ def _format_facts(state: State) -> List[str]:
     for t in sorted(state.facts.congruent, key=lambda c: (c.t1.name, c.t2.name)):
         mapping = ",".join([f"{a}->{b}" for a, b in t.mapping])
         lines.append(f"Congruent({t.t1},{t.t2},[{mapping}])")
+    for corr in sorted(state.facts.correspondences, key=lambda c: (c.t1.name, c.t2.name)):
+        mapping = ",".join([f"{a}->{b}" for a, b in corr.mapping])
+        lines.append(f"Correspondence({corr.t1},{corr.t2},[{mapping}])")
 
     return lines
 
