@@ -1,20 +1,36 @@
 from __future__ import annotations
 
-from typing import Iterable, Optional, Tuple
+from typing import Callable, Iterable, Optional, Tuple
 
 from .core import Angle, State
 from .prisms import Prism
 from .types import SearchResult
 
 
-def goal_checker(state: State) -> Optional[Tuple[Angle, Angle]]:
+def goal_checker_prop9(state: State) -> Optional[Tuple[Angle, Angle]]:
     for ang1, ang2 in state.facts.eq_angs:
         if ang1.v == "B" and ang2.v == "B" and ang1.c == ang2.c:
             return (ang1, ang2)
     return None
 
 
-def score(state: State) -> int:
+def goal_checker_prop5(state: State) -> Optional[Tuple[Angle, Angle]]:
+    """
+    Minimal diagnostic goal for Prop. 5:
+    return the first non-trivial equal-angle pair found.
+    This is intentionally broad, just to test whether the system
+    can surface equal-angle structure beyond the Prop. 9-specific goal.
+    """
+    for ang1, ang2 in state.facts.eq_angs:
+        if ang1 != ang2:
+            return (ang1, ang2)
+    return None
+
+
+GoalFn = Callable[[State], Optional[Tuple[Angle, Angle]]]
+
+
+def score(state: State, goal_fn: GoalFn = goal_checker_prop9) -> int:
     base = (
         len(state.facts.on_rays)
         + 2 * len(state.facts.eq_segs)
@@ -22,7 +38,7 @@ def score(state: State) -> int:
         + 4 * len(state.facts.eq_angs)
         + len(state.triangles)
     )
-    if goal_checker(state):
+    if goal_fn(state):
         base += 1000
     return base
 
@@ -33,10 +49,11 @@ def beam_search(
     *,
     beam_k: int = 20,
     steps: int = 10,
+    goal_fn: GoalFn = goal_checker_prop9,
 ) -> SearchResult:
     beam = [start]
 
-    initial_goal = goal_checker(start)
+    initial_goal = goal_fn(start)
     if initial_goal:
         return SearchResult(True, start, initial_goal)
 
@@ -48,7 +65,7 @@ def beam_search(
                 for res in prism.apply(state):
                     new_state = res.state
 
-                    goal = goal_checker(new_state)
+                    goal = goal_fn(new_state)
                     if goal:
                         return SearchResult(True, new_state, goal)
 
@@ -57,8 +74,8 @@ def beam_search(
         if not candidates:
             break
 
-        candidates.sort(key=score, reverse=True)
+        candidates.sort(key=lambda s: score(s, goal_fn=goal_fn), reverse=True)
         beam = candidates[:beam_k]
 
-    best = max(beam, key=score) if beam else start
-    return SearchResult(False, best, goal_checker(best))
+    best = max(beam, key=lambda s: score(s, goal_fn=goal_fn)) if beam else start
+    return SearchResult(False, best, goal_fn(best))
