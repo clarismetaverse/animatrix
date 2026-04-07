@@ -239,11 +239,11 @@ class CongruenceSSSPrism(Prism):
                 new_state.mode = "CongruenceField"
 
                 derived = derive_angles_from_correspondence(corr)
-                derived_sides = derive_sides_from_correspondence(corr)
+                side_pairs = derive_sides_from_correspondence(corr)
                 sides1 = triangle_sides(t1.vertices)
                 sides2 = triangle_sides(tuple(b for _, b in mapping))
-                sss_equalities = [f"EqSeg({s1},{s2})" for s1, s2 in derived_sides]
-                for seg1, seg2 in derived_sides:
+                side_rewrites = [f"EqSeg({s1},{s2})" for s1, s2 in side_pairs]
+                for seg1, seg2 in side_pairs:
                     new_state.facts.add_eqseg(seg1, seg2)
                 for ang1, ang2 in derived:
                     new_state.facts.add_eqang(ang1, ang2)
@@ -262,10 +262,10 @@ class CongruenceSSSPrism(Prism):
                     ],
                     creates=[],
                     asserts=[f"Congruent({t1.name},{t2.name})", str(corr)],
-                    rewrites=[f"EqAng({a1},{a2})" for (a1, a2) in derived],
-                    used_facts=sss_equalities,
+                    rewrites=[f"EqAng({a1},{a2})" for (a1, a2) in derived] + side_rewrites,
+                    used_facts=side_rewrites,
                     created_objects=[],
-                    derived_facts=[f"EqAng({a1},{a2})" for (a1, a2) in derived],
+                    derived_facts=[f"EqAng({a1},{a2})" for (a1, a2) in derived] + side_rewrites,
                     phase="inference",
                     granularity="micro",
                 )
