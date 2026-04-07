@@ -15,17 +15,6 @@ def goal_checker_prop9(state: State) -> Optional[Tuple[Angle, Angle]]:
 
 
 def goal_checker_prop5(state: State) -> Optional[Tuple[Angle, Angle]]:
-    """
-    Minimal diagnostic goal for Prop. 5:
-    return the first non-trivial equal-angle pair found.
-    This is intentionally broad, just to test whether the system
-    can surface equal-angle structure beyond the Prop. 9-specific goal.
-    """
-    for ang1, ang2 in state.facts.eq_angs:
-        if ang1 != ang2:
-            return (ang1, ang2)
-    return None
-
 
 GoalFn = Callable[[State], Optional[Tuple[Angle, Angle]]]
 
