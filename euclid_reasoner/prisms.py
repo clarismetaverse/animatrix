@@ -10,7 +10,7 @@ from .core import (
     Triangle,
     TriangleCorrespondence,
     triangle_sides,
-    derive_angles_from_congruence,
+    derive_angles_from_correspondence,
     match_sss,
 )
 
@@ -237,7 +237,7 @@ class CongruenceSSSPrism(Prism):
 
                 new_state.mode = "CongruenceField"
 
-                derived = derive_angles_from_congruence(t1.vertices, mapping)
+                derived = derive_angles_from_correspondence(corr)
                 sides1 = triangle_sides(t1.vertices)
                 sides2 = triangle_sides(tuple(b for _, b in mapping))
                 sss_equalities = [f"EqSeg({s1},{s2})" for s1, s2 in zip(sides1, sides2)]
@@ -257,7 +257,7 @@ class CongruenceSSSPrism(Prism):
                         *[f"segment:{s}" for s in sides2],
                     ],
                     creates=[],
-                    asserts=[f"Congruent({t1.name},{t2.name})"],
+                    asserts=[f"Congruent({t1.name},{t2.name})", str(corr)],
                     rewrites=[f"EqAng({a1},{a2})" for (a1, a2) in derived],
                     used_facts=sss_equalities,
                     created_objects=[],
