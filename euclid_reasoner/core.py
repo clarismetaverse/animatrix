@@ -267,3 +267,14 @@ def derive_angles_from_correspondence(
     angles1 = triangle_angles(t1_vertices)
     angles2 = triangle_angles(t2_vertices)
     return list(zip(angles1, angles2))
+
+
+def derive_sides_from_correspondence(
+    corr: TriangleCorrespondence,
+) -> List[Tuple[Segment, Segment]]:
+    t1_vertices = corr.t1.vertices
+    map_dict = {a: b for a, b in corr.mapping}
+    t2_vertices = tuple(map_dict[v] for v in t1_vertices)
+    sides1 = triangle_sides(t1_vertices)
+    sides2 = triangle_sides(t2_vertices)
+    return list(zip(sides1, sides2))
