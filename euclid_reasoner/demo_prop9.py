@@ -22,6 +22,9 @@ def _format_facts(state: State) -> List[str]:
     for t in sorted(state.facts.congruent, key=lambda c: (c.t1.name, c.t2.name)):
         mapping = ",".join([f"{a}->{b}" for a, b in t.mapping])
         lines.append(f"Congruent({t.t1},{t.t2},[{mapping}])")
+    for corr in sorted(state.facts.correspondences, key=lambda c: (c.t1.name, c.t2.name)):
+        mapping = ",".join([f"{a}->{b}" for a, b in corr.mapping])
+        lines.append(f"Correspondence({corr.t1},{corr.t2},[{mapping}])")
     for ang1, ang2 in sorted(state.facts.eq_angs, key=lambda pair: (str(pair[0]), str(pair[1]))):
         if ang1.v == "B" or ang2.v == "B":
             lines.append(f"EqAng({ang1}, {ang2})")

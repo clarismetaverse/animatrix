@@ -8,6 +8,7 @@ from .core import (
     Segment,
     State,
     Triangle,
+    TriangleCorrespondence,
     triangle_sides,
     derive_angles_from_congruence,
     match_sss,
@@ -230,6 +231,9 @@ class CongruenceSSSPrism(Prism):
 
                 if not new_state.facts.add_congruent(congruent):
                     continue
+
+                corr = TriangleCorrespondence(t1, t2, mapping)
+                new_state.facts.add_correspondence(corr)
 
                 new_state.mode = "CongruenceField"
 

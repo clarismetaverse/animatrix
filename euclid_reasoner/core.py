@@ -69,6 +69,17 @@ class Congruent:
     mapping: Tuple[Tuple[str, str], ...]
 
 
+@dataclass(frozen=True)
+class TriangleCorrespondence:
+    t1: Triangle
+    t2: Triangle
+    mapping: Tuple[Tuple[str, str], ...]
+
+    def __str__(self) -> str:
+        pairs = ",".join(f"{a}->{b}" for a, b in self.mapping)
+        return f"Correspondence({self.t1},{self.t2},[{pairs}])"
+
+
 # ---------- Fact store ----------
 
 @dataclass
@@ -77,6 +88,7 @@ class Facts:
     eq_segs: Set[Tuple[Segment, Segment]] = field(default_factory=set)
     eq_angs: Set[Tuple[Angle, Angle]] = field(default_factory=set)
     congruent: Set[Congruent] = field(default_factory=set)
+    correspondences: Set[TriangleCorrespondence] = field(default_factory=set)
 
     def add_on_ray(self, point: str, ray: str) -> bool:
         fact = OnRay(point, ray)
@@ -103,6 +115,12 @@ class Facts:
         if congruent in self.congruent:
             return False
         self.congruent.add(congruent)
+        return True
+
+    def add_correspondence(self, corr: TriangleCorrespondence) -> bool:
+        if corr in self.correspondences:
+            return False
+        self.correspondences.add(corr)
         return True
 
     def has_eqseg(self, seg1: Segment, seg2: Segment) -> bool:
@@ -138,6 +156,7 @@ class State:
                 eq_segs=set(self.facts.eq_segs),
                 eq_angs=set(self.facts.eq_angs),
                 congruent=set(self.facts.congruent),
+                correspondences=set(self.facts.correspondences),
             ),
             triangles=list(self.triangles),
             mode=self.mode,
