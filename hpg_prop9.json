@@ -1,0 +1,1470 @@
+{
+  "edges": [
+    {
+      "from": "view:fact_space:point:D1:point_object",
+      "meta": {},
+      "to": "object:point:D1",
+      "type": "interprets"
+    },
+    {
+      "from": "view:fact_space:point:E_D1:point_object",
+      "meta": {},
+      "to": "object:point:E_D1",
+      "type": "interprets"
+    },
+    {
+      "from": "view:fact_space:segment:BD1:segment_object",
+      "meta": {},
+      "to": "object:segment:BD1",
+      "type": "interprets"
+    },
+    {
+      "from": "view:fact_space:segment:BE_D1:segment_object",
+      "meta": {},
+      "to": "object:segment:BE_D1",
+      "type": "interprets"
+    },
+    {
+      "from": "view:fact_space:segment:BF_D1_E_D1:segment_object",
+      "meta": {},
+      "to": "object:segment:BF_D1_E_D1",
+      "type": "interprets"
+    },
+    {
+      "from": "view:fact_space:segment:BF_D1_E_D1:segment_object",
+      "meta": {},
+      "to": "object:segment:BF_D1_E_D1",
+      "type": "interprets"
+    },
+    {
+      "from": "view:fact_space:segment:D1F_D1_E_D1:segment_object",
+      "meta": {},
+      "to": "object:segment:D1F_D1_E_D1",
+      "type": "interprets"
+    },
+    {
+      "from": "view:fact_space:segment:E_D1F_D1_E_D1:segment_object",
+      "meta": {},
+      "to": "object:segment:E_D1F_D1_E_D1",
+      "type": "interprets"
+    },
+    {
+      "from": "view:fact_space:triangle:T_D1F_D1_E_D1B:triangle_instance",
+      "meta": {},
+      "to": "object:triangle:T_D1F_D1_E_D1B",
+      "type": "interprets"
+    },
+    {
+      "from": "view:fact_space:triangle:T_E_D1F_D1_E_D1B:triangle_instance",
+      "meta": {},
+      "to": "object:triangle:T_E_D1F_D1_E_D1B",
+      "type": "interprets"
+    },
+    {
+      "from": "view:fact_space:triangle:T_eq_D1E_D1F_D1_E_D1:triangle_instance",
+      "meta": {},
+      "to": "object:triangle:T_eq_D1E_D1F_D1_E_D1",
+      "type": "interprets"
+    },
+    {
+      "from": "view:fact_space:angle:ang(D1F_D1_E_D1B):angle_object",
+      "meta": {},
+      "to": "object:angle:ang(D1F_D1_E_D1B)",
+      "type": "interprets"
+    },
+    {
+      "from": "view:fact_space:angle:ang(E_D1F_D1_E_D1B):angle_object",
+      "meta": {},
+      "to": "object:angle:ang(E_D1F_D1_E_D1B)",
+      "type": "interprets"
+    },
+    {
+      "from": "view:fact_space:angle:ang(D1BF_D1_E_D1):angle_object",
+      "meta": {},
+      "to": "object:angle:ang(D1BF_D1_E_D1)",
+      "type": "interprets"
+    },
+    {
+      "from": "view:fact_space:angle:ang(E_D1BF_D1_E_D1):angle_object",
+      "meta": {},
+      "to": "object:angle:ang(E_D1BF_D1_E_D1)",
+      "type": "interprets"
+    },
+    {
+      "from": "view:fact_space:angle:ang(F_D1_E_D1D1B):angle_object",
+      "meta": {},
+      "to": "object:angle:ang(F_D1_E_D1D1B)",
+      "type": "interprets"
+    },
+    {
+      "from": "view:fact_space:angle:ang(F_D1_E_D1E_D1B):angle_object",
+      "meta": {},
+      "to": "object:angle:ang(F_D1_E_D1E_D1B)",
+      "type": "interprets"
+    },
+    {
+      "from": "view:fact_space:angle:ang(D1BF_D1_E_D1):angle_object",
+      "meta": {},
+      "to": "object:angle:ang(D1BF_D1_E_D1)",
+      "type": "interprets"
+    },
+    {
+      "from": "view:fact_space:angle:ang(E_D1BF_D1_E_D1):angle_object",
+      "meta": {},
+      "to": "object:angle:ang(E_D1BF_D1_E_D1)",
+      "type": "interprets"
+    },
+    {
+      "from": "projection:hstep:0",
+      "meta": {},
+      "to": "construction_space",
+      "type": "in_space"
+    },
+    {
+      "from": "view:construction_space:ray:BA:generic",
+      "meta": {},
+      "to": "object:ray:BA",
+      "type": "interprets"
+    },
+    {
+      "from": "projection:hstep:0",
+      "meta": {},
+      "to": "view:construction_space:ray:BA:generic",
+      "type": "uses"
+    },
+    {
+      "from": "view:construction_space:point:D1:constructed_point",
+      "meta": {},
+      "to": "object:point:D1",
+      "type": "interprets"
+    },
+    {
+      "from": "projection:hstep:0",
+      "meta": {},
+      "to": "view:construction_space:point:D1:constructed_point",
+      "type": "creates"
+    },
+    {
+      "from": "view:construction_space:ray:BA:generic",
+      "meta": {},
+      "to": "object:ray:BA",
+      "type": "interprets"
+    },
+    {
+      "from": "projection:hstep:0",
+      "meta": {},
+      "to": "fact:OnRay(D1,BA)",
+      "type": "asserts"
+    },
+    {
+      "from": "projection:hstep:1",
+      "meta": {},
+      "to": "construction_space",
+      "type": "in_space"
+    },
+    {
+      "from": "view:construction_space:point:D1:constructed_point",
+      "meta": {},
+      "to": "object:point:D1",
+      "type": "interprets"
+    },
+    {
+      "from": "projection:hstep:1",
+      "meta": {},
+      "to": "view:construction_space:point:D1:constructed_point",
+      "type": "uses"
+    },
+    {
+      "from": "view:construction_space:segment:BD1:constructed_segment",
+      "meta": {},
+      "to": "object:segment:BD1",
+      "type": "interprets"
+    },
+    {
+      "from": "projection:hstep:1",
+      "meta": {},
+      "to": "view:construction_space:segment:BD1:constructed_segment",
+      "type": "uses"
+    },
+    {
+      "from": "view:construction_space:ray:BC:generic",
+      "meta": {},
+      "to": "object:ray:BC",
+      "type": "interprets"
+    },
+    {
+      "from": "projection:hstep:1",
+      "meta": {},
+      "to": "view:construction_space:ray:BC:generic",
+      "type": "uses"
+    },
+    {
+      "from": "projection:hstep:1",
+      "meta": {},
+      "to": "fact:OnRay(D1,BA)",
+      "type": "uses"
+    },
+    {
+      "from": "view:construction_space:point:E_D1:constructed_point",
+      "meta": {},
+      "to": "object:point:E_D1",
+      "type": "interprets"
+    },
+    {
+      "from": "projection:hstep:1",
+      "meta": {},
+      "to": "view:construction_space:point:E_D1:constructed_point",
+      "type": "creates"
+    },
+    {
+      "from": "view:construction_space:point:D1:constructed_point",
+      "meta": {},
+      "to": "object:point:D1",
+      "type": "interprets"
+    },
+    {
+      "from": "view:construction_space:segment:BD1:constructed_segment",
+      "meta": {},
+      "to": "object:segment:BD1",
+      "type": "interprets"
+    },
+    {
+      "from": "view:construction_space:ray:BC:generic",
+      "meta": {},
+      "to": "object:ray:BC",
+      "type": "interprets"
+    },
+    {
+      "from": "projection:hstep:1",
+      "meta": {},
+      "to": "fact:OnRay(E_D1,BC)",
+      "type": "asserts"
+    },
+    {
+      "from": "projection:hstep:1",
+      "meta": {},
+      "to": "fact:EqSeg(BD1,BE_D1)",
+      "type": "asserts"
+    },
+    {
+      "from": "projection:hstep:2",
+      "meta": {},
+      "to": "triangle_space",
+      "type": "in_space"
+    },
+    {
+      "from": "view:triangle_space:point:D1:triangle_vertex_candidate",
+      "meta": {},
+      "to": "object:point:D1",
+      "type": "interprets"
+    },
+    {
+      "from": "projection:hstep:2",
+      "meta": {},
+      "to": "view:triangle_space:point:D1:triangle_vertex_candidate",
+      "type": "uses"
+    },
+    {
+      "from": "view:triangle_space:point:E_D1:triangle_vertex_candidate",
+      "meta": {},
+      "to": "object:point:E_D1",
+      "type": "interprets"
+    },
+    {
+      "from": "projection:hstep:2",
+      "meta": {},
+      "to": "view:triangle_space:point:E_D1:triangle_vertex_candidate",
+      "type": "uses"
+    },
+    {
+      "from": "view:triangle_space:point:F_D1_E_D1:triangle_vertex_candidate",
+      "meta": {},
+      "to": "object:point:F_D1_E_D1",
+      "type": "interprets"
+    },
+    {
+      "from": "projection:hstep:2",
+      "meta": {},
+      "to": "view:triangle_space:point:F_D1_E_D1:triangle_vertex_candidate",
+      "type": "uses"
+    },
+    {
+      "from": "view:triangle_space:segment:BD1:triangle_side_candidate",
+      "meta": {},
+      "to": "object:segment:BD1",
+      "type": "interprets"
+    },
+    {
+      "from": "projection:hstep:2",
+      "meta": {},
+      "to": "view:triangle_space:segment:BD1:triangle_side_candidate",
+      "type": "uses"
+    },
+    {
+      "from": "view:triangle_space:segment:BE_D1:triangle_side_candidate",
+      "meta": {},
+      "to": "object:segment:BE_D1",
+      "type": "interprets"
+    },
+    {
+      "from": "projection:hstep:2",
+      "meta": {},
+      "to": "view:triangle_space:segment:BE_D1:triangle_side_candidate",
+      "type": "uses"
+    },
+    {
+      "from": "view:triangle_space:segment:BF_D1_E_D1:triangle_side_candidate",
+      "meta": {},
+      "to": "object:segment:BF_D1_E_D1",
+      "type": "interprets"
+    },
+    {
+      "from": "projection:hstep:2",
+      "meta": {},
+      "to": "view:triangle_space:segment:BF_D1_E_D1:triangle_side_candidate",
+      "type": "uses"
+    },
+    {
+      "from": "projection:hstep:2",
+      "meta": {},
+      "to": "fact:OnRay(D1,BA)",
+      "type": "uses"
+    },
+    {
+      "from": "projection:hstep:2",
+      "meta": {},
+      "to": "fact:OnRay(E_D1,BC)",
+      "type": "uses"
+    },
+    {
+      "from": "view:triangle_space:triangle:T_D1F_D1_E_D1B:triangle_instance",
+      "meta": {},
+      "to": "object:triangle:T_D1F_D1_E_D1B",
+      "type": "interprets"
+    },
+    {
+      "from": "projection:hstep:2",
+      "meta": {},
+      "to": "view:triangle_space:triangle:T_D1F_D1_E_D1B:triangle_instance",
+      "type": "creates"
+    },
+    {
+      "from": "view:triangle_space:triangle:T_E_D1F_D1_E_D1B:triangle_instance",
+      "meta": {},
+      "to": "object:triangle:T_E_D1F_D1_E_D1B",
+      "type": "interprets"
+    },
+    {
+      "from": "projection:hstep:2",
+      "meta": {},
+      "to": "view:triangle_space:triangle:T_E_D1F_D1_E_D1B:triangle_instance",
+      "type": "creates"
+    },
+    {
+      "from": "view:triangle_space:point:D1:triangle_vertex_candidate",
+      "meta": {},
+      "to": "object:point:D1",
+      "type": "interprets"
+    },
+    {
+      "from": "view:triangle_space:point:D1:triangle_vertex_candidate",
+      "meta": {},
+      "to": "view:construction_space:point:D1:constructed_point",
+      "type": "explores"
+    },
+    {
+      "from": "view:triangle_space:point:E_D1:triangle_vertex_candidate",
+      "meta": {},
+      "to": "object:point:E_D1",
+      "type": "interprets"
+    },
+    {
+      "from": "view:triangle_space:point:E_D1:triangle_vertex_candidate",
+      "meta": {},
+      "to": "view:construction_space:point:E_D1:constructed_point",
+      "type": "explores"
+    },
+    {
+      "from": "view:triangle_space:point:F_D1_E_D1:triangle_vertex_candidate",
+      "meta": {},
+      "to": "object:point:F_D1_E_D1",
+      "type": "interprets"
+    },
+    {
+      "from": "view:triangle_space:segment:BD1:triangle_side_candidate",
+      "meta": {},
+      "to": "object:segment:BD1",
+      "type": "interprets"
+    },
+    {
+      "from": "view:triangle_space:segment:BE_D1:triangle_side_candidate",
+      "meta": {},
+      "to": "object:segment:BE_D1",
+      "type": "interprets"
+    },
+    {
+      "from": "view:triangle_space:segment:BF_D1_E_D1:triangle_side_candidate",
+      "meta": {},
+      "to": "object:segment:BF_D1_E_D1",
+      "type": "interprets"
+    },
+    {
+      "from": "projection:hstep:2",
+      "meta": {},
+      "to": "fact:EqSeg(BF_D1_E_D1,BF_D1_E_D1)",
+      "type": "asserts"
+    },
+    {
+      "from": "projection:hstep:3",
+      "meta": {},
+      "to": "equilateral_space",
+      "type": "in_space"
+    },
+    {
+      "from": "view:equilateral_space:point:D1:equilateral_vertex_candidate",
+      "meta": {},
+      "to": "object:point:D1",
+      "type": "interprets"
+    },
+    {
+      "from": "projection:hstep:3",
+      "meta": {},
+      "to": "view:equilateral_space:point:D1:equilateral_vertex_candidate",
+      "type": "uses"
+    },
+    {
+      "from": "view:equilateral_space:point:E_D1:equilateral_vertex_candidate",
+      "meta": {},
+      "to": "object:point:E_D1",
+      "type": "interprets"
+    },
+    {
+      "from": "projection:hstep:3",
+      "meta": {},
+      "to": "view:equilateral_space:point:E_D1:equilateral_vertex_candidate",
+      "type": "uses"
+    },
+    {
+      "from": "view:equilateral_space:segment:D1E_D1:equal_side_candidate",
+      "meta": {},
+      "to": "object:segment:D1E_D1",
+      "type": "interprets"
+    },
+    {
+      "from": "projection:hstep:3",
+      "meta": {},
+      "to": "view:equilateral_space:segment:D1E_D1:equal_side_candidate",
+      "type": "uses"
+    },
+    {
+      "from": "projection:hstep:3",
+      "meta": {},
+      "to": "fact:OnRay(D1,BA)",
+      "type": "uses"
+    },
+    {
+      "from": "projection:hstep:3",
+      "meta": {},
+      "to": "fact:OnRay(E_D1,BC)",
+      "type": "uses"
+    },
+    {
+      "from": "view:equilateral_space:point:F_D1_E_D1:equilateral_vertex_candidate",
+      "meta": {},
+      "to": "object:point:F_D1_E_D1",
+      "type": "interprets"
+    },
+    {
+      "from": "projection:hstep:3",
+      "meta": {},
+      "to": "view:equilateral_space:point:F_D1_E_D1:equilateral_vertex_candidate",
+      "type": "creates"
+    },
+    {
+      "from": "view:equilateral_space:triangle:T_eq_D1E_D1F_D1_E_D1:triangle_instance",
+      "meta": {},
+      "to": "object:triangle:T_eq_D1E_D1F_D1_E_D1",
+      "type": "interprets"
+    },
+    {
+      "from": "projection:hstep:3",
+      "meta": {},
+      "to": "view:equilateral_space:triangle:T_eq_D1E_D1F_D1_E_D1:triangle_instance",
+      "type": "creates"
+    },
+    {
+      "from": "view:equilateral_space:point:D1:equilateral_vertex_candidate",
+      "meta": {},
+      "to": "object:point:D1",
+      "type": "interprets"
+    },
+    {
+      "from": "view:equilateral_space:point:D1:equilateral_vertex_candidate",
+      "meta": {},
+      "to": "view:triangle_space:point:D1:triangle_vertex_candidate",
+      "type": "explores"
+    },
+    {
+      "from": "view:equilateral_space:point:E_D1:equilateral_vertex_candidate",
+      "meta": {},
+      "to": "object:point:E_D1",
+      "type": "interprets"
+    },
+    {
+      "from": "view:equilateral_space:point:E_D1:equilateral_vertex_candidate",
+      "meta": {},
+      "to": "view:triangle_space:point:E_D1:triangle_vertex_candidate",
+      "type": "explores"
+    },
+    {
+      "from": "view:equilateral_space:segment:D1E_D1:equal_side_candidate",
+      "meta": {},
+      "to": "object:segment:D1E_D1",
+      "type": "interprets"
+    },
+    {
+      "from": "projection:hstep:3",
+      "meta": {},
+      "to": "fact:EqSeg(D1F_D1_E_D1,E_D1F_D1_E_D1)",
+      "type": "asserts"
+    },
+    {
+      "from": "projection:hstep:4",
+      "meta": {},
+      "to": "congruence_space",
+      "type": "in_space"
+    },
+    {
+      "from": "view:congruence_space:triangle:T_D1F_D1_E_D1B:congruence_triangle",
+      "meta": {},
+      "to": "object:triangle:T_D1F_D1_E_D1B",
+      "type": "interprets"
+    },
+    {
+      "from": "projection:hstep:4",
+      "meta": {},
+      "to": "view:congruence_space:triangle:T_D1F_D1_E_D1B:congruence_triangle",
+      "type": "uses"
+    },
+    {
+      "from": "view:congruence_space:triangle:T_E_D1F_D1_E_D1B:congruence_triangle",
+      "meta": {},
+      "to": "object:triangle:T_E_D1F_D1_E_D1B",
+      "type": "interprets"
+    },
+    {
+      "from": "projection:hstep:4",
+      "meta": {},
+      "to": "view:congruence_space:triangle:T_E_D1F_D1_E_D1B:congruence_triangle",
+      "type": "uses"
+    },
+    {
+      "from": "view:congruence_space:segment:D1F_D1_E_D1:congruence_participant",
+      "meta": {},
+      "to": "object:segment:D1F_D1_E_D1",
+      "type": "interprets"
+    },
+    {
+      "from": "projection:hstep:4",
+      "meta": {},
+      "to": "view:congruence_space:segment:D1F_D1_E_D1:congruence_participant",
+      "type": "uses"
+    },
+    {
+      "from": "view:congruence_space:segment:BF_D1_E_D1:congruence_participant",
+      "meta": {},
+      "to": "object:segment:BF_D1_E_D1",
+      "type": "interprets"
+    },
+    {
+      "from": "projection:hstep:4",
+      "meta": {},
+      "to": "view:congruence_space:segment:BF_D1_E_D1:congruence_participant",
+      "type": "uses"
+    },
+    {
+      "from": "view:congruence_space:segment:BD1:congruence_participant",
+      "meta": {},
+      "to": "object:segment:BD1",
+      "type": "interprets"
+    },
+    {
+      "from": "projection:hstep:4",
+      "meta": {},
+      "to": "view:congruence_space:segment:BD1:congruence_participant",
+      "type": "uses"
+    },
+    {
+      "from": "view:congruence_space:segment:E_D1F_D1_E_D1:congruence_participant",
+      "meta": {},
+      "to": "object:segment:E_D1F_D1_E_D1",
+      "type": "interprets"
+    },
+    {
+      "from": "projection:hstep:4",
+      "meta": {},
+      "to": "view:congruence_space:segment:E_D1F_D1_E_D1:congruence_participant",
+      "type": "uses"
+    },
+    {
+      "from": "view:congruence_space:segment:BF_D1_E_D1:congruence_participant",
+      "meta": {},
+      "to": "object:segment:BF_D1_E_D1",
+      "type": "interprets"
+    },
+    {
+      "from": "projection:hstep:4",
+      "meta": {},
+      "to": "view:congruence_space:segment:BF_D1_E_D1:congruence_participant",
+      "type": "uses"
+    },
+    {
+      "from": "view:congruence_space:segment:BE_D1:congruence_participant",
+      "meta": {},
+      "to": "object:segment:BE_D1",
+      "type": "interprets"
+    },
+    {
+      "from": "projection:hstep:4",
+      "meta": {},
+      "to": "view:congruence_space:segment:BE_D1:congruence_participant",
+      "type": "uses"
+    },
+    {
+      "from": "projection:hstep:4",
+      "meta": {},
+      "to": "fact:EqSeg(D1F_D1_E_D1,E_D1F_D1_E_D1)",
+      "type": "uses"
+    },
+    {
+      "from": "projection:hstep:4",
+      "meta": {},
+      "to": "fact:EqSeg(BF_D1_E_D1,BF_D1_E_D1)",
+      "type": "uses"
+    },
+    {
+      "from": "projection:hstep:4",
+      "meta": {},
+      "to": "fact:EqSeg(BD1,BE_D1)",
+      "type": "uses"
+    },
+    {
+      "from": "view:congruence_space:triangle:T_D1F_D1_E_D1B:congruence_triangle",
+      "meta": {},
+      "to": "object:triangle:T_D1F_D1_E_D1B",
+      "type": "interprets"
+    },
+    {
+      "from": "view:congruence_space:triangle:T_D1F_D1_E_D1B:congruence_triangle",
+      "meta": {},
+      "to": "view:triangle_space:triangle:T_D1F_D1_E_D1B:triangle_instance",
+      "type": "explores"
+    },
+    {
+      "from": "view:congruence_space:triangle:T_E_D1F_D1_E_D1B:congruence_triangle",
+      "meta": {},
+      "to": "object:triangle:T_E_D1F_D1_E_D1B",
+      "type": "interprets"
+    },
+    {
+      "from": "view:congruence_space:triangle:T_E_D1F_D1_E_D1B:congruence_triangle",
+      "meta": {},
+      "to": "view:triangle_space:triangle:T_E_D1F_D1_E_D1B:triangle_instance",
+      "type": "explores"
+    },
+    {
+      "from": "view:congruence_space:segment:D1F_D1_E_D1:congruence_participant",
+      "meta": {},
+      "to": "object:segment:D1F_D1_E_D1",
+      "type": "interprets"
+    },
+    {
+      "from": "view:congruence_space:segment:BF_D1_E_D1:congruence_participant",
+      "meta": {},
+      "to": "object:segment:BF_D1_E_D1",
+      "type": "interprets"
+    },
+    {
+      "from": "view:congruence_space:segment:BD1:congruence_participant",
+      "meta": {},
+      "to": "object:segment:BD1",
+      "type": "interprets"
+    },
+    {
+      "from": "view:congruence_space:segment:E_D1F_D1_E_D1:congruence_participant",
+      "meta": {},
+      "to": "object:segment:E_D1F_D1_E_D1",
+      "type": "interprets"
+    },
+    {
+      "from": "view:congruence_space:segment:BF_D1_E_D1:congruence_participant",
+      "meta": {},
+      "to": "object:segment:BF_D1_E_D1",
+      "type": "interprets"
+    },
+    {
+      "from": "view:congruence_space:segment:BE_D1:congruence_participant",
+      "meta": {},
+      "to": "object:segment:BE_D1",
+      "type": "interprets"
+    },
+    {
+      "from": "projection:hstep:4",
+      "meta": {},
+      "to": "fact:Congruent(T_D1F_D1_E_D1B,T_E_D1F_D1_E_D1B)",
+      "type": "asserts"
+    },
+    {
+      "from": "projection:hstep:4",
+      "meta": {},
+      "to": "fact:EqAng(ang(F_D1_E_D1D1B),ang(F_D1_E_D1E_D1B))",
+      "type": "rewrites"
+    },
+    {
+      "from": "projection:hstep:4",
+      "meta": {},
+      "to": "fact:EqAng(ang(D1F_D1_E_D1B),ang(E_D1F_D1_E_D1B))",
+      "type": "rewrites"
+    },
+    {
+      "from": "projection:hstep:4",
+      "meta": {},
+      "to": "fact:EqAng(ang(D1BF_D1_E_D1),ang(E_D1BF_D1_E_D1))",
+      "type": "rewrites"
+    },
+    {
+      "from": "fact:EqAng(ang(D1BF_D1_E_D1),ang(E_D1BF_D1_E_D1))",
+      "meta": {},
+      "to": "query:goal",
+      "type": "supports_goal"
+    },
+    {
+      "from": "projection:hstep:4",
+      "meta": {},
+      "to": "fact:EqAng(ang(F_D1_E_D1D1B),ang(F_D1_E_D1E_D1B))",
+      "type": "derives"
+    },
+    {
+      "from": "projection:hstep:4",
+      "meta": {},
+      "to": "fact:EqAng(ang(D1F_D1_E_D1B),ang(E_D1F_D1_E_D1B))",
+      "type": "derives"
+    },
+    {
+      "from": "projection:hstep:4",
+      "meta": {},
+      "to": "fact:EqAng(ang(D1BF_D1_E_D1),ang(E_D1BF_D1_E_D1))",
+      "type": "derives"
+    },
+    {
+      "from": "fact:EqAng(ang(D1BF_D1_E_D1),ang(E_D1BF_D1_E_D1))",
+      "meta": {},
+      "to": "query:goal",
+      "type": "supports_goal"
+    },
+    {
+      "from": "fact:EqAng(ang(D1BF_D1_E_D1),ang(E_D1BF_D1_E_D1))",
+      "meta": {},
+      "to": "query:goal",
+      "type": "supports_goal"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "query:goal",
+      "kind": "query",
+      "label": "Goal: EqAng(ang(D1BF_D1_E_D1),ang(E_D1BF_D1_E_D1))",
+      "meta": {}
+    },
+    {
+      "id": "construction_space",
+      "kind": "space",
+      "label": "construction_space",
+      "meta": {}
+    },
+    {
+      "id": "triangle_space",
+      "kind": "space",
+      "label": "triangle_space",
+      "meta": {}
+    },
+    {
+      "id": "equilateral_space",
+      "kind": "space",
+      "label": "equilateral_space",
+      "meta": {}
+    },
+    {
+      "id": "congruence_space",
+      "kind": "space",
+      "label": "congruence_space",
+      "meta": {}
+    },
+    {
+      "id": "fact_space",
+      "kind": "space",
+      "label": "fact_space",
+      "meta": {}
+    },
+    {
+      "id": "object:point:D1",
+      "kind": "object",
+      "label": "point:D1",
+      "meta": {},
+      "object_type": "point"
+    },
+    {
+      "id": "view:fact_space:point:D1:point_object",
+      "kind": "view",
+      "label": "point:D1@point_object",
+      "meta": {},
+      "object_id": "object:point:D1",
+      "role": "point_object",
+      "space_id": "fact_space"
+    },
+    {
+      "id": "object:point:E_D1",
+      "kind": "object",
+      "label": "point:E_D1",
+      "meta": {},
+      "object_type": "point"
+    },
+    {
+      "id": "view:fact_space:point:E_D1:point_object",
+      "kind": "view",
+      "label": "point:E_D1@point_object",
+      "meta": {},
+      "object_id": "object:point:E_D1",
+      "role": "point_object",
+      "space_id": "fact_space"
+    },
+    {
+      "id": "object:segment:BD1",
+      "kind": "object",
+      "label": "segment:BD1",
+      "meta": {},
+      "object_type": "segment"
+    },
+    {
+      "id": "view:fact_space:segment:BD1:segment_object",
+      "kind": "view",
+      "label": "segment:BD1@segment_object",
+      "meta": {},
+      "object_id": "object:segment:BD1",
+      "role": "segment_object",
+      "space_id": "fact_space"
+    },
+    {
+      "id": "object:segment:BE_D1",
+      "kind": "object",
+      "label": "segment:BE_D1",
+      "meta": {},
+      "object_type": "segment"
+    },
+    {
+      "id": "view:fact_space:segment:BE_D1:segment_object",
+      "kind": "view",
+      "label": "segment:BE_D1@segment_object",
+      "meta": {},
+      "object_id": "object:segment:BE_D1",
+      "role": "segment_object",
+      "space_id": "fact_space"
+    },
+    {
+      "id": "object:segment:BF_D1_E_D1",
+      "kind": "object",
+      "label": "segment:BF_D1_E_D1",
+      "meta": {},
+      "object_type": "segment"
+    },
+    {
+      "id": "view:fact_space:segment:BF_D1_E_D1:segment_object",
+      "kind": "view",
+      "label": "segment:BF_D1_E_D1@segment_object",
+      "meta": {},
+      "object_id": "object:segment:BF_D1_E_D1",
+      "role": "segment_object",
+      "space_id": "fact_space"
+    },
+    {
+      "id": "object:segment:D1F_D1_E_D1",
+      "kind": "object",
+      "label": "segment:D1F_D1_E_D1",
+      "meta": {},
+      "object_type": "segment"
+    },
+    {
+      "id": "view:fact_space:segment:D1F_D1_E_D1:segment_object",
+      "kind": "view",
+      "label": "segment:D1F_D1_E_D1@segment_object",
+      "meta": {},
+      "object_id": "object:segment:D1F_D1_E_D1",
+      "role": "segment_object",
+      "space_id": "fact_space"
+    },
+    {
+      "id": "object:segment:E_D1F_D1_E_D1",
+      "kind": "object",
+      "label": "segment:E_D1F_D1_E_D1",
+      "meta": {},
+      "object_type": "segment"
+    },
+    {
+      "id": "view:fact_space:segment:E_D1F_D1_E_D1:segment_object",
+      "kind": "view",
+      "label": "segment:E_D1F_D1_E_D1@segment_object",
+      "meta": {},
+      "object_id": "object:segment:E_D1F_D1_E_D1",
+      "role": "segment_object",
+      "space_id": "fact_space"
+    },
+    {
+      "id": "object:triangle:T_D1F_D1_E_D1B",
+      "kind": "object",
+      "label": "triangle:T_D1F_D1_E_D1B",
+      "meta": {},
+      "object_type": "triangle"
+    },
+    {
+      "id": "view:fact_space:triangle:T_D1F_D1_E_D1B:triangle_instance",
+      "kind": "view",
+      "label": "triangle:T_D1F_D1_E_D1B@triangle_instance",
+      "meta": {},
+      "object_id": "object:triangle:T_D1F_D1_E_D1B",
+      "role": "triangle_instance",
+      "space_id": "fact_space"
+    },
+    {
+      "id": "object:triangle:T_E_D1F_D1_E_D1B",
+      "kind": "object",
+      "label": "triangle:T_E_D1F_D1_E_D1B",
+      "meta": {},
+      "object_type": "triangle"
+    },
+    {
+      "id": "view:fact_space:triangle:T_E_D1F_D1_E_D1B:triangle_instance",
+      "kind": "view",
+      "label": "triangle:T_E_D1F_D1_E_D1B@triangle_instance",
+      "meta": {},
+      "object_id": "object:triangle:T_E_D1F_D1_E_D1B",
+      "role": "triangle_instance",
+      "space_id": "fact_space"
+    },
+    {
+      "id": "object:triangle:T_eq_D1E_D1F_D1_E_D1",
+      "kind": "object",
+      "label": "triangle:T_eq_D1E_D1F_D1_E_D1",
+      "meta": {},
+      "object_type": "triangle"
+    },
+    {
+      "id": "view:fact_space:triangle:T_eq_D1E_D1F_D1_E_D1:triangle_instance",
+      "kind": "view",
+      "label": "triangle:T_eq_D1E_D1F_D1_E_D1@triangle_instance",
+      "meta": {},
+      "object_id": "object:triangle:T_eq_D1E_D1F_D1_E_D1",
+      "role": "triangle_instance",
+      "space_id": "fact_space"
+    },
+    {
+      "id": "object:angle:ang(D1F_D1_E_D1B)",
+      "kind": "object",
+      "label": "angle:ang(D1F_D1_E_D1B)",
+      "meta": {},
+      "object_type": "angle"
+    },
+    {
+      "id": "view:fact_space:angle:ang(D1F_D1_E_D1B):angle_object",
+      "kind": "view",
+      "label": "angle:ang(D1F_D1_E_D1B)@angle_object",
+      "meta": {},
+      "object_id": "object:angle:ang(D1F_D1_E_D1B)",
+      "role": "angle_object",
+      "space_id": "fact_space"
+    },
+    {
+      "id": "object:angle:ang(E_D1F_D1_E_D1B)",
+      "kind": "object",
+      "label": "angle:ang(E_D1F_D1_E_D1B)",
+      "meta": {},
+      "object_type": "angle"
+    },
+    {
+      "id": "view:fact_space:angle:ang(E_D1F_D1_E_D1B):angle_object",
+      "kind": "view",
+      "label": "angle:ang(E_D1F_D1_E_D1B)@angle_object",
+      "meta": {},
+      "object_id": "object:angle:ang(E_D1F_D1_E_D1B)",
+      "role": "angle_object",
+      "space_id": "fact_space"
+    },
+    {
+      "id": "object:angle:ang(D1BF_D1_E_D1)",
+      "kind": "object",
+      "label": "angle:ang(D1BF_D1_E_D1)",
+      "meta": {},
+      "object_type": "angle"
+    },
+    {
+      "id": "view:fact_space:angle:ang(D1BF_D1_E_D1):angle_object",
+      "kind": "view",
+      "label": "angle:ang(D1BF_D1_E_D1)@angle_object",
+      "meta": {},
+      "object_id": "object:angle:ang(D1BF_D1_E_D1)",
+      "role": "angle_object",
+      "space_id": "fact_space"
+    },
+    {
+      "id": "object:angle:ang(E_D1BF_D1_E_D1)",
+      "kind": "object",
+      "label": "angle:ang(E_D1BF_D1_E_D1)",
+      "meta": {},
+      "object_type": "angle"
+    },
+    {
+      "id": "view:fact_space:angle:ang(E_D1BF_D1_E_D1):angle_object",
+      "kind": "view",
+      "label": "angle:ang(E_D1BF_D1_E_D1)@angle_object",
+      "meta": {},
+      "object_id": "object:angle:ang(E_D1BF_D1_E_D1)",
+      "role": "angle_object",
+      "space_id": "fact_space"
+    },
+    {
+      "id": "object:angle:ang(F_D1_E_D1D1B)",
+      "kind": "object",
+      "label": "angle:ang(F_D1_E_D1D1B)",
+      "meta": {},
+      "object_type": "angle"
+    },
+    {
+      "id": "view:fact_space:angle:ang(F_D1_E_D1D1B):angle_object",
+      "kind": "view",
+      "label": "angle:ang(F_D1_E_D1D1B)@angle_object",
+      "meta": {},
+      "object_id": "object:angle:ang(F_D1_E_D1D1B)",
+      "role": "angle_object",
+      "space_id": "fact_space"
+    },
+    {
+      "id": "object:angle:ang(F_D1_E_D1E_D1B)",
+      "kind": "object",
+      "label": "angle:ang(F_D1_E_D1E_D1B)",
+      "meta": {},
+      "object_type": "angle"
+    },
+    {
+      "id": "view:fact_space:angle:ang(F_D1_E_D1E_D1B):angle_object",
+      "kind": "view",
+      "label": "angle:ang(F_D1_E_D1E_D1B)@angle_object",
+      "meta": {},
+      "object_id": "object:angle:ang(F_D1_E_D1E_D1B)",
+      "role": "angle_object",
+      "space_id": "fact_space"
+    },
+    {
+      "id": "projection:hstep:0",
+      "kind": "projection",
+      "label": "Choose D1 on ray BA",
+      "meta": {},
+      "projection_type": "ChoosePointOnRayBA",
+      "space_id": "construction_space"
+    },
+    {
+      "id": "object:ray:BA",
+      "kind": "object",
+      "label": "ray:BA",
+      "meta": {},
+      "object_type": "unknown"
+    },
+    {
+      "id": "view:construction_space:ray:BA:generic",
+      "kind": "view",
+      "label": "ray:BA@generic",
+      "meta": {
+        "entity": "ray:BA"
+      },
+      "object_id": "object:ray:BA",
+      "role": "generic",
+      "space_id": "construction_space"
+    },
+    {
+      "id": "view:construction_space:point:D1:constructed_point",
+      "kind": "view",
+      "label": "point:D1@constructed_point",
+      "meta": {},
+      "object_id": "object:point:D1",
+      "role": "constructed_point",
+      "space_id": "construction_space"
+    },
+    {
+      "fact_type": "OnRay",
+      "id": "fact:OnRay(D1,BA)",
+      "kind": "fact",
+      "label": "OnRay(D1,BA)",
+      "meta": {
+        "origin": "construction",
+        "space_id": "construction_space"
+      },
+      "space_id": "construction_space"
+    },
+    {
+      "id": "projection:hstep:1",
+      "kind": "projection",
+      "label": "Copy BD1 to ray BC -> E_D1 with BE=BD",
+      "meta": {},
+      "projection_type": "CopyLengthToRayBC",
+      "space_id": "construction_space"
+    },
+    {
+      "id": "view:construction_space:segment:BD1:constructed_segment",
+      "kind": "view",
+      "label": "segment:BD1@constructed_segment",
+      "meta": {},
+      "object_id": "object:segment:BD1",
+      "role": "constructed_segment",
+      "space_id": "construction_space"
+    },
+    {
+      "id": "object:ray:BC",
+      "kind": "object",
+      "label": "ray:BC",
+      "meta": {},
+      "object_type": "unknown"
+    },
+    {
+      "id": "view:construction_space:ray:BC:generic",
+      "kind": "view",
+      "label": "ray:BC@generic",
+      "meta": {
+        "entity": "ray:BC"
+      },
+      "object_id": "object:ray:BC",
+      "role": "generic",
+      "space_id": "construction_space"
+    },
+    {
+      "id": "view:construction_space:point:E_D1:constructed_point",
+      "kind": "view",
+      "label": "point:E_D1@constructed_point",
+      "meta": {},
+      "object_id": "object:point:E_D1",
+      "role": "constructed_point",
+      "space_id": "construction_space"
+    },
+    {
+      "fact_type": "OnRay",
+      "id": "fact:OnRay(E_D1,BC)",
+      "kind": "fact",
+      "label": "OnRay(E_D1,BC)",
+      "meta": {
+        "derived_from": "OnRay(D1,BA)",
+        "origin": "construction",
+        "space_id": "construction_space"
+      },
+      "space_id": "construction_space"
+    },
+    {
+      "fact_type": "EqSeg",
+      "id": "fact:EqSeg(BD1,BE_D1)",
+      "kind": "fact",
+      "label": "EqSeg(BD1,BE_D1)",
+      "meta": {
+        "derived_from": "OnRay(D1,BA)",
+        "origin": "construction",
+        "space_id": "construction_space"
+      },
+      "space_id": "construction_space"
+    },
+    {
+      "id": "projection:hstep:2",
+      "kind": "projection",
+      "label": "Instantiate triangles T_D1F_D1_E_D1B(D1F_D1_E_D1B) and T_E_D1F_D1_E_D1B(E_D1F_D1_E_D1B) with common BF",
+      "meta": {},
+      "projection_type": "InstantiateComparisonTriangles",
+      "space_id": "triangle_space"
+    },
+    {
+      "id": "view:triangle_space:point:D1:triangle_vertex_candidate",
+      "kind": "view",
+      "label": "point:D1@triangle_vertex_candidate",
+      "meta": {},
+      "object_id": "object:point:D1",
+      "role": "triangle_vertex_candidate",
+      "space_id": "triangle_space"
+    },
+    {
+      "id": "view:triangle_space:point:E_D1:triangle_vertex_candidate",
+      "kind": "view",
+      "label": "point:E_D1@triangle_vertex_candidate",
+      "meta": {},
+      "object_id": "object:point:E_D1",
+      "role": "triangle_vertex_candidate",
+      "space_id": "triangle_space"
+    },
+    {
+      "id": "object:point:F_D1_E_D1",
+      "kind": "object",
+      "label": "point:F_D1_E_D1",
+      "meta": {},
+      "object_type": "point"
+    },
+    {
+      "id": "view:triangle_space:point:F_D1_E_D1:triangle_vertex_candidate",
+      "kind": "view",
+      "label": "point:F_D1_E_D1@triangle_vertex_candidate",
+      "meta": {},
+      "object_id": "object:point:F_D1_E_D1",
+      "role": "triangle_vertex_candidate",
+      "space_id": "triangle_space"
+    },
+    {
+      "id": "view:triangle_space:segment:BD1:triangle_side_candidate",
+      "kind": "view",
+      "label": "segment:BD1@triangle_side_candidate",
+      "meta": {},
+      "object_id": "object:segment:BD1",
+      "role": "triangle_side_candidate",
+      "space_id": "triangle_space"
+    },
+    {
+      "id": "view:triangle_space:segment:BE_D1:triangle_side_candidate",
+      "kind": "view",
+      "label": "segment:BE_D1@triangle_side_candidate",
+      "meta": {},
+      "object_id": "object:segment:BE_D1",
+      "role": "triangle_side_candidate",
+      "space_id": "triangle_space"
+    },
+    {
+      "id": "view:triangle_space:segment:BF_D1_E_D1:triangle_side_candidate",
+      "kind": "view",
+      "label": "segment:BF_D1_E_D1@triangle_side_candidate",
+      "meta": {},
+      "object_id": "object:segment:BF_D1_E_D1",
+      "role": "triangle_side_candidate",
+      "space_id": "triangle_space"
+    },
+    {
+      "id": "view:triangle_space:triangle:T_D1F_D1_E_D1B:triangle_instance",
+      "kind": "view",
+      "label": "triangle:T_D1F_D1_E_D1B@triangle_instance",
+      "meta": {},
+      "object_id": "object:triangle:T_D1F_D1_E_D1B",
+      "role": "triangle_instance",
+      "space_id": "triangle_space"
+    },
+    {
+      "id": "view:triangle_space:triangle:T_E_D1F_D1_E_D1B:triangle_instance",
+      "kind": "view",
+      "label": "triangle:T_E_D1F_D1_E_D1B@triangle_instance",
+      "meta": {},
+      "object_id": "object:triangle:T_E_D1F_D1_E_D1B",
+      "role": "triangle_instance",
+      "space_id": "triangle_space"
+    },
+    {
+      "fact_type": "EqSeg",
+      "id": "fact:EqSeg(BF_D1_E_D1,BF_D1_E_D1)",
+      "kind": "fact",
+      "label": "EqSeg(BF_D1_E_D1,BF_D1_E_D1)",
+      "meta": {
+        "derived_from": "OnRay(D1,BA)|OnRay(E_D1,BC)",
+        "origin": "construction",
+        "space_id": "triangle_space"
+      },
+      "space_id": "triangle_space"
+    },
+    {
+      "id": "projection:hstep:3",
+      "kind": "projection",
+      "label": "Construct equilateral on D1E_D1 -> apex F_D1_E_D1",
+      "meta": {},
+      "projection_type": "EquilateralOnSegment",
+      "space_id": "equilateral_space"
+    },
+    {
+      "id": "view:equilateral_space:point:D1:equilateral_vertex_candidate",
+      "kind": "view",
+      "label": "point:D1@equilateral_vertex_candidate",
+      "meta": {},
+      "object_id": "object:point:D1",
+      "role": "equilateral_vertex_candidate",
+      "space_id": "equilateral_space"
+    },
+    {
+      "id": "view:equilateral_space:point:E_D1:equilateral_vertex_candidate",
+      "kind": "view",
+      "label": "point:E_D1@equilateral_vertex_candidate",
+      "meta": {},
+      "object_id": "object:point:E_D1",
+      "role": "equilateral_vertex_candidate",
+      "space_id": "equilateral_space"
+    },
+    {
+      "id": "object:segment:D1E_D1",
+      "kind": "object",
+      "label": "segment:D1E_D1",
+      "meta": {},
+      "object_type": "segment"
+    },
+    {
+      "id": "view:equilateral_space:segment:D1E_D1:equal_side_candidate",
+      "kind": "view",
+      "label": "segment:D1E_D1@equal_side_candidate",
+      "meta": {},
+      "object_id": "object:segment:D1E_D1",
+      "role": "equal_side_candidate",
+      "space_id": "equilateral_space"
+    },
+    {
+      "id": "view:equilateral_space:point:F_D1_E_D1:equilateral_vertex_candidate",
+      "kind": "view",
+      "label": "point:F_D1_E_D1@equilateral_vertex_candidate",
+      "meta": {},
+      "object_id": "object:point:F_D1_E_D1",
+      "role": "equilateral_vertex_candidate",
+      "space_id": "equilateral_space"
+    },
+    {
+      "id": "view:equilateral_space:triangle:T_eq_D1E_D1F_D1_E_D1:triangle_instance",
+      "kind": "view",
+      "label": "triangle:T_eq_D1E_D1F_D1_E_D1@triangle_instance",
+      "meta": {},
+      "object_id": "object:triangle:T_eq_D1E_D1F_D1_E_D1",
+      "role": "triangle_instance",
+      "space_id": "equilateral_space"
+    },
+    {
+      "fact_type": "EqSeg",
+      "id": "fact:EqSeg(D1F_D1_E_D1,E_D1F_D1_E_D1)",
+      "kind": "fact",
+      "label": "EqSeg(D1F_D1_E_D1,E_D1F_D1_E_D1)",
+      "meta": {
+        "derived_from": "OnRay(D1,BA)|OnRay(E_D1,BC)",
+        "origin": "construction",
+        "space_id": "equilateral_space"
+      },
+      "space_id": "equilateral_space"
+    },
+    {
+      "id": "projection:hstep:4",
+      "kind": "projection",
+      "label": "SSS congruence found between T_D1F_D1_E_D1B(D1F_D1_E_D1B) and T_E_D1F_D1_E_D1B(E_D1F_D1_E_D1B)",
+      "meta": {},
+      "projection_type": "CongruenceSSSPrism",
+      "space_id": "congruence_space"
+    },
+    {
+      "id": "view:congruence_space:triangle:T_D1F_D1_E_D1B:congruence_triangle",
+      "kind": "view",
+      "label": "triangle:T_D1F_D1_E_D1B@congruence_triangle",
+      "meta": {},
+      "object_id": "object:triangle:T_D1F_D1_E_D1B",
+      "role": "congruence_triangle",
+      "space_id": "congruence_space"
+    },
+    {
+      "id": "view:congruence_space:triangle:T_E_D1F_D1_E_D1B:congruence_triangle",
+      "kind": "view",
+      "label": "triangle:T_E_D1F_D1_E_D1B@congruence_triangle",
+      "meta": {},
+      "object_id": "object:triangle:T_E_D1F_D1_E_D1B",
+      "role": "congruence_triangle",
+      "space_id": "congruence_space"
+    },
+    {
+      "id": "view:congruence_space:segment:D1F_D1_E_D1:congruence_participant",
+      "kind": "view",
+      "label": "segment:D1F_D1_E_D1@congruence_participant",
+      "meta": {},
+      "object_id": "object:segment:D1F_D1_E_D1",
+      "role": "congruence_participant",
+      "space_id": "congruence_space"
+    },
+    {
+      "id": "view:congruence_space:segment:BF_D1_E_D1:congruence_participant",
+      "kind": "view",
+      "label": "segment:BF_D1_E_D1@congruence_participant",
+      "meta": {},
+      "object_id": "object:segment:BF_D1_E_D1",
+      "role": "congruence_participant",
+      "space_id": "congruence_space"
+    },
+    {
+      "id": "view:congruence_space:segment:BD1:congruence_participant",
+      "kind": "view",
+      "label": "segment:BD1@congruence_participant",
+      "meta": {},
+      "object_id": "object:segment:BD1",
+      "role": "congruence_participant",
+      "space_id": "congruence_space"
+    },
+    {
+      "id": "view:congruence_space:segment:E_D1F_D1_E_D1:congruence_participant",
+      "kind": "view",
+      "label": "segment:E_D1F_D1_E_D1@congruence_participant",
+      "meta": {},
+      "object_id": "object:segment:E_D1F_D1_E_D1",
+      "role": "congruence_participant",
+      "space_id": "congruence_space"
+    },
+    {
+      "id": "view:congruence_space:segment:BE_D1:congruence_participant",
+      "kind": "view",
+      "label": "segment:BE_D1@congruence_participant",
+      "meta": {},
+      "object_id": "object:segment:BE_D1",
+      "role": "congruence_participant",
+      "space_id": "congruence_space"
+    },
+    {
+      "fact_type": "Congruent",
+      "id": "fact:Congruent(T_D1F_D1_E_D1B,T_E_D1F_D1_E_D1B)",
+      "kind": "fact",
+      "label": "Congruent(T_D1F_D1_E_D1B,T_E_D1F_D1_E_D1B)",
+      "meta": {
+        "derived_from": "EqSeg(BD1,BE_D1)|EqSeg(BF_D1_E_D1,BF_D1_E_D1)|EqSeg(D1F_D1_E_D1,E_D1F_D1_E_D1)",
+        "origin": "inference",
+        "space_id": "congruence_space"
+      },
+      "space_id": "congruence_space"
+    },
+    {
+      "fact_type": "EqAng",
+      "id": "fact:EqAng(ang(F_D1_E_D1D1B),ang(F_D1_E_D1E_D1B))",
+      "kind": "fact",
+      "label": "EqAng(ang(F_D1_E_D1D1B),ang(F_D1_E_D1E_D1B))",
+      "meta": {
+        "derived_from": "EqSeg(BD1,BE_D1)|EqSeg(BF_D1_E_D1,BF_D1_E_D1)|EqSeg(D1F_D1_E_D1,E_D1F_D1_E_D1)",
+        "origin": "inference",
+        "space_id": "congruence_space"
+      },
+      "space_id": "congruence_space"
+    },
+    {
+      "fact_type": "EqAng",
+      "id": "fact:EqAng(ang(D1F_D1_E_D1B),ang(E_D1F_D1_E_D1B))",
+      "kind": "fact",
+      "label": "EqAng(ang(D1F_D1_E_D1B),ang(E_D1F_D1_E_D1B))",
+      "meta": {
+        "derived_from": "EqSeg(BD1,BE_D1)|EqSeg(BF_D1_E_D1,BF_D1_E_D1)|EqSeg(D1F_D1_E_D1,E_D1F_D1_E_D1)",
+        "origin": "inference",
+        "space_id": "congruence_space"
+      },
+      "space_id": "congruence_space"
+    },
+    {
+      "fact_type": "EqAng",
+      "id": "fact:EqAng(ang(D1BF_D1_E_D1),ang(E_D1BF_D1_E_D1))",
+      "kind": "fact",
+      "label": "EqAng(ang(D1BF_D1_E_D1),ang(E_D1BF_D1_E_D1))",
+      "meta": {
+        "derived_from": "EqSeg(BD1,BE_D1)|EqSeg(BF_D1_E_D1,BF_D1_E_D1)|EqSeg(D1F_D1_E_D1,E_D1F_D1_E_D1)",
+        "origin": "inference",
+        "space_id": "congruence_space"
+      },
+      "space_id": "congruence_space"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+Solved by beam search? True
+Native target: (Angle(a='D1', v='B', c='F_D1_E_D1'), Angle(a='E_D1', v='B', c='F_D1_E_D1'))
+Prop10-style goal found: EqSeg(BD1, BE_D1)
+Trace:
+- Choose D1 on ray BA
+- Copy BD1 to ray BC -> E_D1 with BE=BD
+- Instantiate triangles T_D1F_D1_E_D1B(D1F_D1_E_D1B) and T_E_D1F_D1_E_D1B(E_D1F_D1_E_D1B) with common BF
+- Construct equilateral on D1E_D1 -> apex F_D1_E_D1
+- SSS congruence found between T_D1F_D1_E_D1B(D1F_D1_E_D1B) and T_E_D1F_D1_E_D1B(E_D1F_D1_E_D1B)
+Key facts:
+- OnRay(D1, BA)
+- OnRay(E_D1, BC)
+- EqSeg(BD1, BE_D1)
+- EqSeg(BF_D1_E_D1, BF_D1_E_D1)
+- EqSeg(D1F_D1_E_D1, E_D1F_D1_E_D1)
+- Congruent(T_D1F_D1_E_D1B(D1F_D1_E_D1B),T_E_D1F_D1_E_D1B(E_D1F_D1_E_D1B),[D1->E_D1,F_D1_E_D1->F_D1_E_D1,B->B])
