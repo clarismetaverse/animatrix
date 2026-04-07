@@ -42,6 +42,14 @@ def main() -> None:
     print("Trace:")
     for step in result.state.trace:
         print(f"- {step}")
+    if result.state.htrace:
+        hstep = result.state.htrace[-1]
+        print("Last structured htrace step:")
+        print(f"- prism: {hstep.prism}")
+        print(f"- label: {hstep.label}")
+        print(f"- asserts: {hstep.asserts}")
+        print(f"- rewrites: {hstep.rewrites}")
+        print(f"- derived_facts: {hstep.derived_facts}")
     print("Key facts:")
     for line in _format_facts(result.state):
         print(f"- {line}")
