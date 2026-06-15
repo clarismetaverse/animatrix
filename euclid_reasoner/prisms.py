@@ -24,6 +24,16 @@ class PrismResult:
 
 class Prism:
     name: str = ""
+    source_space: str = "object_space"
+    target_space: str = "object_space"
+    movement: str = "unspecified"
+
+    def trace_meta(self) -> dict[str, str]:
+        return {
+            "source_space": self.source_space,
+            "target_space": self.target_space,
+            "movement": self.movement,
+        }
 
     def apply(self, state: State) -> List[PrismResult]:
         raise NotImplementedError
@@ -33,6 +43,9 @@ class Prism:
 
 class ChoosePointOnRayBA(Prism):
     name = "ChoosePointOnRayBA"
+    source_space = "object_space"
+    target_space = "construction_space"
+    movement = "construction"
 
     def apply(self, state: State) -> List[PrismResult]:
         if state.facts.all_points_on_ray("BA"):
@@ -49,7 +62,7 @@ class ChoosePointOnRayBA(Prism):
                 new_state.add_step(
                     prism=self.name,
                     label=label,
-                    space="construction_space",
+                    space=self.target_space,
                     uses=["ray:BA"],
                     creates=[f"point:{point}"],
                     asserts=[f"OnRay({point},BA)"],
@@ -58,6 +71,7 @@ class ChoosePointOnRayBA(Prism):
                     derived_facts=[],
                     phase="construction",
                     granularity="micro",
+                    meta=self.trace_meta(),
                 )
 
                 results.append(PrismResult(new_state, label))
@@ -68,6 +82,9 @@ class ChoosePointOnRayBA(Prism):
 
 class CopyLengthToRayBC(Prism):
     name = "CopyLengthToRayBC"
+    source_space = "construction_space"
+    target_space = "construction_space"
+    movement = "length_transport"
 
     def apply(self, state: State) -> List[PrismResult]:
         results: List[PrismResult] = []
@@ -88,7 +105,7 @@ class CopyLengthToRayBC(Prism):
                 new_state.add_step(
                     prism=self.name,
                     label=label,
-                    space="construction_space",
+                    space=self.target_space,
                     uses=[f"point:{point}", f"segment:{seg_bd}", "ray:BC"],
                     creates=[f"point:{target}"],
                     asserts=[
@@ -100,6 +117,7 @@ class CopyLengthToRayBC(Prism):
                     derived_facts=[],
                     phase="construction",
                     granularity="micro",
+                    meta=self.trace_meta(),
                 )
 
                 results.append(PrismResult(new_state, label))
@@ -110,6 +128,9 @@ class CopyLengthToRayBC(Prism):
 
 class EquilateralOnSegment(Prism):
     name = "EquilateralOnSegment"
+    source_space = "construction_space"
+    target_space = "equilateral_space"
+    movement = "generative_blending"
 
     def apply(self, state: State) -> List[PrismResult]:
         results: List[PrismResult] = []
@@ -135,7 +156,7 @@ class EquilateralOnSegment(Prism):
                     new_state.add_step(
                         prism=self.name,
                         label=label,
-                        space="equilateral_space",
+                        space=self.target_space,
                         uses=[f"point:{d}", f"point:{e}", f"segment:{Segment(d, e)}"],
                         creates=[f"point:{apex}", f"triangle:{tri.name}"],
                         asserts=[f"EqSeg({seg_df},{seg_ef})"],
@@ -149,6 +170,7 @@ class EquilateralOnSegment(Prism):
                         derived_facts=[],
                         phase="construction",
                         granularity="micro",
+                        meta=self.trace_meta(),
                     )
 
                     results.append(PrismResult(new_state, label))
@@ -159,6 +181,9 @@ class EquilateralOnSegment(Prism):
 
 class InstantiateComparisonTriangles(Prism):
     name = "InstantiateComparisonTriangles"
+    source_space = "equilateral_space"
+    target_space = "triangle_space"
+    movement = "structuring"
 
     def apply(self, state: State) -> List[PrismResult]:
         results: List[PrismResult] = []
@@ -185,7 +210,7 @@ class InstantiateComparisonTriangles(Prism):
                 new_state.add_step(
                     prism=self.name,
                     label=label,
-                    space="triangle_space",
+                    space=self.target_space,
                     uses=[
                         f"point:{d}",
                         f"point:{e}",
@@ -204,6 +229,7 @@ class InstantiateComparisonTriangles(Prism):
                     derived_facts=[],
                     phase="triangle_instantiation",
                     granularity="micro",
+                    meta=self.trace_meta(),
                 )
 
                 results.append(PrismResult(new_state, label))
@@ -214,6 +240,9 @@ class InstantiateComparisonTriangles(Prism):
 
 class CongruenceSSSPrism(Prism):
     name = "CongruenceSSSPrism"
+    source_space = "triangle_space"
+    target_space = "correspondence_space"
+    movement = "correspondence_transport"
 
     def apply(self, state: State) -> List[PrismResult]:
         results: List[PrismResult] = []
@@ -253,7 +282,7 @@ class CongruenceSSSPrism(Prism):
                 new_state.add_step(
                     prism=self.name,
                     label=label,
-                    space="congruence_space",
+                    space=self.target_space,
                     uses=[
                         f"triangle:{t1.name}",
                         f"triangle:{t2.name}",
@@ -268,6 +297,7 @@ class CongruenceSSSPrism(Prism):
                     derived_facts=[f"EqAng({a1},{a2})" for (a1, a2) in derived] + side_rewrites,
                     phase="inference",
                     granularity="micro",
+                    meta=self.trace_meta(),
                 )
 
                 results.append(PrismResult(new_state, label))
