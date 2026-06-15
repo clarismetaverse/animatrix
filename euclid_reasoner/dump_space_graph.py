@@ -1,13 +1,25 @@
 from __future__ import annotations
 
+import sys
 from collections import Counter
-from typing import Iterable, Tuple
+from typing import Callable, Iterable, Tuple
 
+from .demo_prop5 import solve_prop5
 from .demo_prop9 import solve_prop9
+from .demo_prop10 import solve_prop10
 from .trace_schema import TraceStep
+from .types import SearchResult
 
 
 Transition = Tuple[str, str, str]
+Solver = Callable[[], SearchResult]
+
+
+SOLVERS: dict[str, Solver] = {
+    "prop5": solve_prop5,
+    "prop9": solve_prop9,
+    "prop10": solve_prop10,
+}
 
 
 def _space_transition(step: TraceStep) -> Transition | None:
@@ -45,7 +57,6 @@ def print_space_graph(transitions: Iterable[Transition]) -> None:
         print(f"{source} --[{movement}]--> {target}{suffix}")
 
 
-
 def print_space_path(transitions: Iterable[Transition]) -> None:
     transitions = list(transitions)
 
@@ -63,11 +74,24 @@ def print_space_path(transitions: Iterable[Transition]) -> None:
         print(f"  --[{movement}]--> {target}")
 
 
+def _select_solver(argv: list[str]) -> tuple[str, Solver]:
+    if len(argv) < 2:
+        return "prop9", solve_prop9
+
+    name = argv[1].lower().strip()
+    if name not in SOLVERS:
+        valid = ", ".join(sorted(SOLVERS))
+        raise SystemExit(f"Unknown proposition '{name}'. Valid options: {valid}")
+
+    return name, SOLVERS[name]
+
 
 def main() -> None:
-    result = solve_prop9()
+    prop_name, solver = _select_solver(sys.argv)
+    result = solver()
     transitions = extract_space_transitions(result.state.htrace)
 
+    print(f"Proposition: {prop_name}")
     print(f"Solved? {result.solved}")
     if result.target:
         print(f"Target equality: {result.target}")
