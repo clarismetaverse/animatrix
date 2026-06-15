@@ -15,6 +15,11 @@ def goal_checker_prop9(state: State) -> Optional[Tuple[Angle, Angle]]:
 
 
 def goal_checker_prop5(state: State) -> Optional[Tuple[Angle, Angle]]:
+    for ang1, ang2 in state.facts.eq_angs:
+        if ang1 != ang2 and ang1.v != "B" and ang2.v != "B":
+            return (ang1, ang2)
+    return None
+
 
 GoalFn = Callable[[State], Optional[Tuple[Angle, Angle]]]
 
